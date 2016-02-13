@@ -12,6 +12,7 @@ public import orly.engine.time;
 public import orly.engine.screen;
 public import orly.engine.math.vector2;
 public import orly.engine.math.vector3;
+import derelict.assimp3.assimp;
 
 import std.datetime, std.stdio, std.conv;
 
@@ -43,6 +44,9 @@ final class Engine {
 	    Backend = new SDL2();
 		Backend.Init();
 
+		// Load other libraries
+		DerelictASSIMP3.load("lib/assimp.dll");
+
 		// Set the options
 		Backend.SetRenderFunc(&RenderFunc);
 		Backend.MaxFPS = 120;
@@ -62,7 +66,9 @@ final class Engine {
     void EnterMainLoop() {
 		StopWatch swFrame;
 		StopWatch swSecond;
+		StopWatch swTotal;
 		swSecond.start();
+		swTotal.start();
 
 		int frames;
 		int fps;
@@ -85,6 +91,7 @@ final class Engine {
 			Keyboard.Reset();
 
 			Time.DeltaTime = swFrame.peek.msecs / 1000f; // Save delta time
+			Time.Seconds = swTotal.peek.msecs / 1000f; // Save seconds since the start
 
 			swFrame.reset(); // Reset frame stopwatch
 			
@@ -120,6 +127,15 @@ class Test : Component {
 void PrepareTheScene() {
 	Log.Print("Preparing a test scene");
 
+	import orly.engine.components.test_renderer;
+	import orly.engine.components.camera;
+	import orly.engine.components.cameramovement;
+
+	GameObject camera = CurrentScene.CreateGameObject();
+	camera.AddComponent!Camera();
+	camera.AddComponent!CameraMovement();
+
+
 	GameObject obj = CurrentScene.CreateGameObject();
-	obj.AddComponent!Test();
+	obj.AddComponent!TestRenderer();
 }

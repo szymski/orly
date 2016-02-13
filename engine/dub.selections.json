@@ -4,6 +4,7 @@
 		"derelict-gl3": "1.0.18",
 		"derelict-sdl2": "2.0.0",
 		"derelict-util": "2.0.4",
+		"derelict-assimp3": "1.0.1"
 	},
 	"fileVersion": 1
 }

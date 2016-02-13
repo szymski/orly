@@ -2,6 +2,8 @@ module orly.engine.scene;
 
 import orly.engine.backend.ibackend;
 import orly.engine.gameobjects.gameobject;
+import orly.engine.components.camera;
+import orly.engine.time;
 
 final class Scene {
  private:
@@ -25,21 +27,8 @@ final class Scene {
 		Renders the scene.
 	*/
 	void Render() {
-		import derelict.opengl3.gl;
-		glLoadIdentity();
-
-		Backend.SetupPerspective(90, 0, 1000000);
-
-
-		glTranslatef(0, 0, 100f);
-
-		glColor3f(1f, 0f, 1f);
-
-		glBegin(GL_TRIANGLES);
-		glVertex3f(100, 0, 10);
-		glVertex3f(100, 100, 0);
-		glVertex3f(0, 0, 0);
-		glEnd();
+		if(Camera.main !is null)
+			Camera.main.SetupRendering();
 
 		foreach(GameObject obj; gameObjects)
 			obj.Render();

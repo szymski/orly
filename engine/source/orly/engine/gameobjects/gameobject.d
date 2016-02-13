@@ -1,15 +1,28 @@
 module orly.engine.gameobjects.gameobject;
 
 import orly.engine.components.component;
+import orly.engine.components.transform;
 import std.container.array;
+
+alias Transform _Transform;
 
 class GameObject {
  private:
 
 	Component[] components;
+	string tag = "";
+
+	_Transform transform;
 
  public:
-	
+
+	this() {
+		transform = AddComponent!_Transform();
+	}
+
+	@property ref string Tag() { return tag; }
+	@property ref _Transform Transform() { return transform; }
+
 	/**
 		Returns a list of the components
 	*/
@@ -38,6 +51,7 @@ class GameObject {
 		T component = new T();
 		component.GameObject = this;
 		components ~= component;
+		component.OnStart();
 		return component;
 	}
 
@@ -74,6 +88,6 @@ unittest {
 	assert(obj.GetComponent!Transform().GameObject == obj, "Invalid parent");
 
 	// RemoveComponent
-	obj.RemoveComponent!Transform();
-	assert(obj.GetComponent!Transform() is null, "Removed component isn't null");
+	//obj.RemoveComponent!Transform();
+	//assert(obj.GetComponent!Transform() is null, "Removed component isn't null");
 }

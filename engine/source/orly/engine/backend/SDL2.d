@@ -2,11 +2,14 @@ module orly.engine.backend.sdl2;
 
 import orly.engine.engine;
 import orly.engine.backend.ibackend;
+import orly.engine.renderer.mesh;
 import derelict.opengl3.gl;
 import derelict.sdl2.sdl;
 import std.conv;
 import std.datetime;
 import std.math;
+import orly.engine.renderer.shader;
+import std.string;
 
 /**
 	SDL 2.0 Backend
@@ -149,13 +152,14 @@ class SDL2 : IBackend {
 		Vertex buffers
 	*/
  
-	int VertexBufferCreate() {
+	int VertexBufferCreate(Mesh mesh) {
 		uint id;
 
 		glGenBuffers(1, &id);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, id);
+		auto data = mesh.DataXYZ;
+		glBufferData(GL_ARRAY_BUFFER, data.length * 4, data.ptr, GL_STATIC_DRAW);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 		return id;
 	}
@@ -171,7 +175,70 @@ class SDL2 : IBackend {
 	void VertexBufferUnbind() {
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
+
+	void VertexBufferDraw(int id, int size) {
+		glEnableVertexAttribArray(0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, id);
+		glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * 4, null);
+
+		glDrawArrays(GL_TRIANGLES, 0, size);
+			
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		glDisableVertexAttribArray(0);
+	}
     
+	/*
+		Shaders
+	*/
+
+	int ProgramCreate() {
+		return glCreateProgram();
+	}
+
+	void ProgramDestroy(int id) {
+		glDeleteProgram(id);
+	}
+
+	void ProgramUse(int id) {
+		glUseProgram(id);
+	}
+
+	void ProgramUnbind() {
+		glUseProgram(0);
+	}
+
+	void ProgramCompile(int id) {
+		glLinkProgram(id);
+	}
+
+	int ShaderCreate(int program, ShaderType type, string source) {
+		int shader = glCreateShader(type == ShaderType.Vertex ? GL_VERTEX_SHADER : (type == ShaderType.Geometry ? GL_GEOMETRY_SHADER : GL_FRAGMENT_SHADER));
+		immutable(char)*[] name = [source.toStringz()];
+		int len = source.length;
+		glShaderSource(shader, 1, name.ptr, &len);
+		glCompileShader(shader);
+
+		// Check for errors
+		int param;
+		glGetShaderiv(shader, GL_COMPILE_STATUS, &param);
+		if(param == 0) {
+			char[1024] error;
+			int strLen;
+			glGetShaderInfoLog(shader, 1024, &strLen, error.ptr);
+			Log.Throw(new Exception("Shader compilation error: " ~ to!string(error)));
+		}
+
+		glAttachShader(program, shader);
+
+		return shader;
+	}
+
+	void ShaderDestroy(int id) {
+		glDeleteShader(id);
+	}
+
 	/*
 		Projection
 	*/
@@ -179,17 +246,18 @@ class SDL2 : IBackend {
 	void SetupPerspective(float fov, float zNear, float zFar) {
 		float aspect = cast(float)Width / cast(float)Height;
 
-		float fH = tan(fov / 360f * PI) * zNear;
-		float fW = fH * aspect;
+		float ymax = zNear * tan(fov * PI / 360f);
+		float ymin = -ymax;
+		float xmin = ymin * aspect;
+		float xmax = ymax * aspect;
 
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
 		glViewport(0, 0, Screen.Width, Screen.Height);
-		glFrustum(-fW, fW, -fH, fH, zNear, zFar);
+		glFrustum(xmin, xmax, ymin, ymax, zNear, zFar);
 
 		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
 		glEnable(GL_DEPTH_TEST);
-		glDepthFunc(GL_LEQUAL);
-		glShadeModel(GL_SMOOTH);
 	}
 }

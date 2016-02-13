@@ -3,14 +3,15 @@ module orly.engine.math.vector3;
 import std.math;
 
 class Vector3 {
-	
-	float x, y, z;
+ private:
+	float x = 0, y = 0, z = 0;
 
-	public this() {
+ public:
+	this() {
 	
 	}
 
-	public this(float x, float y, float z) {
+	this(float x, float y, float z) {
 		X = x;
 		Y = y;
 		Z = z;
@@ -27,7 +28,7 @@ class Vector3 {
 		return new Vector3(x / m, y / m, z / m);
 	}
 
-	public static float Distance(Vector3 left, Vector3 right) {
+	static float Distance(Vector3 left, Vector3 right) {
 		return (left - right).Length;
 	}
 

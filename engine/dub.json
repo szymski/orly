@@ -1,11 +1,12 @@
 {
 	"name": "orly",
-	"description": "A minimal D application.",
+	"description": "OrlyEngine",
 	"copyright": "Copyright © 2016, Szymon",
 	"authors": ["Szymon Jankowski"],
 	"targetPath": "./build/",
 	"dependencies": {
 		"derelict-sdl2": "~>2.0.0",
-		"derelict-gl3": "~>1.0.18"
+		"derelict-gl3": "~>1.0.18",
+		"derelict-assimp3": "~>1.0.1"
 	}
 }

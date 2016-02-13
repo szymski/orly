@@ -1,5 +1,8 @@
 module orly.engine.backend.ibackend;
 
+import orly.engine.renderer.mesh;
+import orly.engine.renderer.shader;
+
 interface IBackend {
 
 	/*
@@ -38,14 +41,28 @@ interface IBackend {
 		Vertex buffers
 	*/
 	
-	/** Creates a vertex buffer and returns its id */
-	int VertexBufferCreate();
-	/** Destroys a vertex buffer */
+	/** Creates a vertex buffer from specified mesh and returns its id. */
+	int VertexBufferCreate(Mesh mesh);
+	/** Destroys a vertex buffer. */
 	void VertexBufferDestroy(int id);
-	/** Binds vertex buffer */
+	/** Binds vertex buffer. */
 	void VertexBufferBind(int id);
-	/** Unbinds vertex buffer */
+	/** Unbinds vertex buffer. */
 	void VertexBufferUnbind();
+	/** Draws vertex buffer. */
+	void VertexBufferDraw(int id, int size);
+
+	/*
+		Shaders
+	*/
+
+	int ProgramCreate();
+	void ProgramDestroy(int id);
+	void ProgramUse(int id);
+	void ProgramUnbind();
+	void ProgramCompile(int id);
+	int ShaderCreate(int program, ShaderType type, string source);
+	void ShaderDestroy(int id);
 
 	/*
 		Projection
