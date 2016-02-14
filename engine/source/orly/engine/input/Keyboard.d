@@ -1,8 +1,6 @@
 module orly.engine.input.keyboard;
 
-enum KeyboardKey : int {
-	A = 'a',
-}
+public import orly.engine.input.keyboardkeys;
 
 final static class Keyboard {
  private:

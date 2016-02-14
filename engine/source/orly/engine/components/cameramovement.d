@@ -12,8 +12,21 @@ import orly.engine.time;
 class CameraMovement : Component {
 	
 	override public void OnUpdate() {
+
 		if(Keyboard.GetKey(KeyboardKey.A)) {
-			GameObject.Transform.Position.X += Time.DeltaTime;
+			GameObject.Transform.Position.X -= Time.DeltaTime * 20f;
+		}
+
+		if(Keyboard.GetKey(KeyboardKey.D)) {
+			GameObject.Transform.Position.X += Time.DeltaTime * 20f;
+		}
+
+		if(Keyboard.GetKey(KeyboardKey.W)) {
+			GameObject.Transform.Position.Z += Time.DeltaTime * 20f;
+		}
+
+		if(Keyboard.GetKey(KeyboardKey.S)) {
+			GameObject.Transform.Position.Z -= Time.DeltaTime * 20f;
 		}
 	}
 

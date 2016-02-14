@@ -53,11 +53,11 @@ class SDL2 : IBackend {
 
 				case SDL_KEYDOWN:
 					if(event.key.repeat) break;
-					Keyboard.SetKey(KeyboardKey.A, true);
+					Keyboard.SetKey(cast(KeyboardKey)event.key.keysym.sym, true);
 					break;
 
 				case SDL_KEYUP:
-					Keyboard.SetKey(KeyboardKey.A, false);
+					Keyboard.SetKey(cast(KeyboardKey)event.key.keysym.sym, false);
 					break;
 
 				default:

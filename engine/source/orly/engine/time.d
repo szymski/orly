@@ -10,5 +10,5 @@ final static class Time {
 	/** Delta time. */
 	@property static ref float DeltaTime() { return deltaTime; }
 	/** Seconds since the start. */
-	@property static ref float Seconds() { return deltaTime; }
+	@property static ref float Seconds() { return seconds; }
 }

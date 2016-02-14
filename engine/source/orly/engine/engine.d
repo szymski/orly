@@ -94,7 +94,7 @@ final class Engine {
 			Time.Seconds = swTotal.peek.msecs / 1000f; // Save seconds since the start
 
 			swFrame.reset(); // Reset frame stopwatch
-			
+
 			frames++;
         }   
     }
