@@ -5,6 +5,7 @@ public import orly.engine.renderer.renderer;
 public import orly.engine.backend.sdl2;
 public import orly.engine.backend.ibackend;
 public import orly.engine.input.keyboard;
+public import orly.engine.input.mouse;
 public import orly.engine.scene;
 public import orly.engine.gameobjects.gameobject;
 public import orly.engine.components.component;
@@ -18,6 +19,7 @@ import std.datetime, std.stdio, std.conv;
 
 final class Engine {
  private:
+
 	static Engine instance;
 
 	Scene scene;
@@ -28,6 +30,7 @@ final class Engine {
 	}
 
  public:
+
 	this() {
         instance = this;
     }
@@ -89,6 +92,7 @@ final class Engine {
 			scene.Update();
             Renderer.Update();
 			Keyboard.Reset();
+			Mouse.Reset();
 
 			Time.DeltaTime = swFrame.peek.msecs / 1000f; // Save delta time
 			Time.Seconds = swTotal.peek.msecs / 1000f; // Save seconds since the start

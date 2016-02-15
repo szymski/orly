@@ -41,6 +41,12 @@ class SDL2 : IBackend {
             throw new Exception("SDL window could not be created! Error: " ~ to!string(SDL_GetError()));
     }
 
+	static int[] SDLMouseButtonToEngine = [
+		1: 0,
+		3: 1,
+		2: 2,
+	];
+
 	void UpdateEvents() {
         SDL_Event event;
 
@@ -58,6 +64,21 @@ class SDL2 : IBackend {
 
 				case SDL_KEYUP:
 					Keyboard.SetKey(cast(KeyboardKey)event.key.keysym.sym, false);
+					break;
+
+				case SDL_MOUSEBUTTONDOWN:
+					Mouse.SetButton(SDLMouseButtonToEngine[event.button.button], true);
+					break;
+
+				case SDL_MOUSEBUTTONUP:
+					Mouse.SetButton(SDLMouseButtonToEngine[event.button.button], false);
+					break;
+
+				case SDL_MOUSEMOTION:
+					Mouse.Position.X = event.motion.x;
+					Mouse.Position.Y = event.motion.y;
+					Mouse.Acceleration.X = event.motion.xrel;
+					Mouse.Acceleration.Y = event.motion.yrel;
 					break;
 
 				default:

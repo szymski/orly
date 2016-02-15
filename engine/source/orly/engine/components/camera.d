@@ -12,7 +12,7 @@ class Camera : Component {
 
  public:
 	
-	int fov = 90;
+	float fov = 90;
 	
 	this() {
 		main = this;
@@ -21,7 +21,7 @@ class Camera : Component {
 	void SetupRendering() {
 		import derelict.opengl3.gl;
 
-		Backend.SetupPerspective(90, 0.1f, 500f);
+		Backend.SetupPerspective(fov, 0.1f, 500f);
 		glLoadIdentity();
 
 		glTranslatef(-GameObject.Transform.Position.X, -GameObject.Transform.Position.Y, -GameObject.Transform.Position.Z);

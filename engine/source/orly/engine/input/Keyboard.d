@@ -53,4 +53,6 @@ final static class Keyboard {
 			upKeys[i] = false;
 		}
 	}
+
+	// TODO: Get all keys
 }

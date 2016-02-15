@@ -2,8 +2,9 @@ module orly.engine.time;
 
 final static class Time {
  private:
-	static float deltaTime;
-	static float seconds;
+
+	static float deltaTime = 0f;
+	static float seconds = 0f;
 
  public:
 
