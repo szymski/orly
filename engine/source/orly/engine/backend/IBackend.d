@@ -2,7 +2,21 @@ module orly.engine.backend.ibackend;
 
 import orly.engine.renderer.mesh;
 import orly.engine.renderer.shader;
+import orly.engine.math.matrix4x4;
 
+/**
+	Graphics matrix mode enum.
+*/
+enum MatrixMode {
+	ModelView,
+	Projection,
+	Texture,
+	Color
+}
+
+/**
+	Graphics backend wrapper.
+*/
 interface IBackend {
 
 	/*
@@ -28,10 +42,10 @@ interface IBackend {
 	/** Returns the height of the window */
 	@property int Height();
 
-	/** Sets window size */
+	/** Sets window size. */
 	void SetWindowSize(int width, int height);
 
-	/** Max frames-per-second */
+	/** Max frames-per-second. -1 is no limit.*/
 	@property ref int MaxFPS();
 
 	@property void WindowTitle(string title);
@@ -65,11 +79,26 @@ interface IBackend {
 	void ShaderDestroy(int id);
 
 	/*
+		Textures
+	*/
+
+	int TextureCreate();
+	void TextureDestroy(int id);
+	void TextureBind(int id);
+	void TextureUnbind();
+
+	/*
 		Projection
 	*/
 
-	/** Sets up perspective rendering. */
-	void SetupPerspective(float fov, float zNear, float zFar);
+	/** Sets the viewport. */
+	void SetViewport(int x, int y, int width, int heigh);
+
+	/** Loads the matrix. */
+	void SetMatrix(Matrix4x4 matrix);
+
+	/** Sets current matrix mode. */
+	void SetMatrixMode(MatrixMode mode);
 }
 
 interface IBackendGraphics {

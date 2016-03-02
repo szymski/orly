@@ -11,7 +11,7 @@ static class Log {
 	static string[] lines;
 
 	/**
-		Prints a message to the console
+		Prints a message to the console.
 	*/
 	static void Print(T...)(T args) {
 		string str = "<" ~ Clock.currTime().toISOExtString() ~ "> ";
@@ -25,7 +25,7 @@ static class Log {
 	}
 
 	/**
-		Prints a debug to the console
+		Prints a debug message to the console.
 	*/
 	static void PrintDebug(T...)(T args) {
 		string str = "<" ~ Clock.currTime().toISOExtString() ~ "> DEBUG: ";
@@ -39,7 +39,7 @@ static class Log {
 	}
     
 	/**
-		Prints an error message to the console
+		Prints an error message to the console.
 	*/
     static void PrintError(T...)(T args) {
 		string str = "<" ~ Clock.currTime().toISOExtString() ~ "> ERROR: ";
@@ -53,7 +53,7 @@ static class Log {
 	}
 
 	/**
-		Throws an exception and prints the message into the log
+		Throws an exception and prints the message into the console.
 	*/
 	static void Throw(Exception e) {
 		PrintError(e.msg);
@@ -61,7 +61,7 @@ static class Log {
 	}
 
 	/**
-		Saves the configuration to a file
+		Saves the log to a file.
 	*/
 	static void SaveToFile(string filename = "log.txt") {
 		std.file.write(filename, lines.join("\n"));

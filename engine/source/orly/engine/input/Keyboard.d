@@ -5,9 +5,9 @@ public import orly.engine.input.keyboardkeys;
 final static class Keyboard {
  private:
 
-	static bool[255] keys;
-	static bool[255] downKeys;
-	static bool[255] upKeys;
+	static bool[1024] keys;
+	static bool[1024] downKeys;
+	static bool[1024] upKeys;
 
  public:
 

@@ -13,8 +13,9 @@ public import orly.engine.time;
 public import orly.engine.screen;
 public import orly.engine.math.vector2;
 public import orly.engine.math.vector3;
-import derelict.assimp3.assimp;
 
+import derelict.assimp3.assimp;
+import derelict.devil.il;
 import std.datetime, std.stdio, std.conv;
 
 final class Engine {
@@ -49,10 +50,12 @@ final class Engine {
 
 		// Load other libraries
 		DerelictASSIMP3.load("lib/assimp.dll");
+		DerelictIL.load("lib/DevIL.dll");
 
 		// Set the options
 		Backend.SetRenderFunc(&RenderFunc);
 		Backend.MaxFPS = 120;
+		//Backend.MaxFPS = -1;
 		Backend.WindowTitle = "Orly";
 
 		scene = new Scene();
@@ -78,7 +81,7 @@ final class Engine {
 
         while(running) {
 			// FPS counting
-			if(swSecond.peek.msecs >= 1000) {
+			if(swSecond.peek.nsecs >= 1_000_000_000) {
 				fps = frames;
 				frames = 0;
 				swSecond.reset();
@@ -94,8 +97,8 @@ final class Engine {
 			Keyboard.Reset();
 			Mouse.Reset();
 
-			Time.DeltaTime = swFrame.peek.msecs / 1000f; // Save delta time
-			Time.Seconds = swTotal.peek.msecs / 1000f; // Save seconds since the start
+			Time.DeltaTime = swFrame.peek.nsecs / 1_000_000_000f; // Save delta time
+			Time.Seconds = swTotal.peek.nsecs / 1_000_000_000f; // Save seconds since the start
 
 			swFrame.reset(); // Reset frame stopwatch
 

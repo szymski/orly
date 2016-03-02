@@ -31,8 +31,8 @@ class CameraMovement : Component {
 			GameObject.Transform.Position.Z -= Time.DeltaTime * 20f;
 		}
 
-		GameObject.Transform.Position.X -= Mouse.Acceleration.X * 10f * Time.DeltaTime;
-		GameObject.Transform.Position.Y += Mouse.Acceleration.Y * 10f * Time.DeltaTime;
+		GameObject.Transform.Rotation.X -= Mouse.Acceleration.X * 100f * Time.DeltaTime;
+		GameObject.Transform.Rotation.Y -= Mouse.Acceleration.Y * 100f * Time.DeltaTime;
 
 		if(Mouse.GetButton(0))
 			GameObject.GetComponent!Camera().fov += 100f * Time.DeltaTime;

@@ -2,12 +2,13 @@ module orly.engine.assets.models.modelasset;
 
 public import orly.engine.renderer.vertex;
 public import orly.engine.renderer.mesh;
+import orly.engine.assets.asset;
 import derelict.assimp3.assimp;
 import std.stdio;
 
 alias Mesh _Mesh;
 
-class ModelAsset {
+class ModelAsset : Asset {
  private:
 	_Mesh mesh;
 
@@ -37,6 +38,10 @@ class ModelAsset {
 
 	@property _Mesh Mesh() {
 		return mesh;
+	}
+
+	override public bool CanHandle(string filename) {
+		return true;
 	}
 
 }

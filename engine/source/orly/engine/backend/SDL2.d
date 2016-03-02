@@ -3,8 +3,10 @@ module orly.engine.backend.sdl2;
 import orly.engine.engine;
 import orly.engine.backend.ibackend;
 import orly.engine.renderer.mesh;
+import orly.engine.math.matrix4x4;
 import derelict.opengl3.gl;
 import derelict.sdl2.sdl;
+import derelict.sdl2.image;
 import std.conv;
 import std.datetime;
 import std.math;
@@ -41,7 +43,7 @@ class SDL2 : IBackend {
             throw new Exception("SDL window could not be created! Error: " ~ to!string(SDL_GetError()));
     }
 
-	static int[] SDLMouseButtonToEngine = [
+	const int[] SDLMouseButtonToEngine = [
 		1: 0,
 		3: 1,
 		2: 2,
@@ -97,6 +99,7 @@ class SDL2 : IBackend {
     void Init() {
 		Log.Print("Loading SDL and OpenGL libraries");
         DerelictSDL2.load("lib/SDL2.dll");
+		DerelictSDL2Image.load("lib/SDL2_image.dll");
         DerelictGL.load();
         
         InitSDL();
@@ -261,24 +264,52 @@ class SDL2 : IBackend {
 	}
 
 	/*
+		Textures
+	*/
+
+	int TextureCreate() {
+		return -1;
+	}
+
+	void TextureDestroy(int id) {
+		
+	}
+
+	void TextureBind(int id) {
+		
+	}
+
+	void TextureUnbind() {
+		
+	}
+
+	/*
 		Projection
 	*/
 
-	void SetupPerspective(float fov, float zNear, float zFar) {
-		float aspect = cast(float)Width / cast(float)Height;
+	void SetViewport(int x, int y, int width, int height) {
+		glViewport(0, 0, width, height);
+	}
 
-		float ymax = zNear * tan(fov * PI / 360f);
-		float ymin = -ymax;
-		float xmin = ymin * aspect;
-		float xmax = ymax * aspect;
+	void SetMatrix(Matrix4x4 matrix) {
+		float[16] arr = [
+			matrix.m[0][0], matrix.m[0][1], matrix.m[0][2], matrix.m[0][3], 
+			matrix.m[1][0], matrix.m[1][1], matrix.m[1][2], matrix.m[1][3], 
+			matrix.m[2][0], matrix.m[2][1], matrix.m[2][2], matrix.m[2][3], 
+			matrix.m[3][0], matrix.m[3][1], matrix.m[3][2], matrix.m[3][3], 
+		];
 
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glViewport(0, 0, Screen.Width, Screen.Height);
-		glFrustum(xmin, xmax, ymin, ymax, zNear, zFar);
+		glLoadMatrixf(&arr[0]);
+	}
 
-		glMatrixMode(GL_MODELVIEW);
-		glLoadIdentity();
-		glEnable(GL_DEPTH_TEST);
+	const int[] EngineMatrixModeToOpenGL = [
+		MatrixMode.ModelView: GL_MODELVIEW,
+		MatrixMode.Projection: GL_PROJECTION,
+		MatrixMode.Texture: GL_TEXTURE,
+		MatrixMode.Color: GL_COLOR,
+	];
+
+	void SetMatrixMode(MatrixMode mode) {
+		glMatrixMode(EngineMatrixModeToOpenGL[mode]);
 	}
 }

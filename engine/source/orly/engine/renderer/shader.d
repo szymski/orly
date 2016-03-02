@@ -5,15 +5,15 @@ import orly.engine.backend.ibackend;
 enum ShaderType { Vertex = 1, Fragment = 2, Geometry = 4 }
 
 class Shader {
- private:
+private:
 
 	int program;
 	bool compiled;
 
- public:
-	
+public:
+
 	ShaderType type = cast(ShaderType)0;
-	
+
 	/**
 		Creates a new shader. It must be compiled, to use it.
 	*/

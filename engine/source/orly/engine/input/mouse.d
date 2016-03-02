@@ -16,9 +16,12 @@ final static class Mouse {
 
  public:
 
+	/** Returns the position of the cursor. */
 	@property static Vector2 Position() { return position; }
+	/** Returns the acceleration of the mouse. */
 	@property static Vector2 Acceleration() { return acceleration; }
 
+	/** Returns mouse wheel delta. */
 	@property static ref float WheelDelta() { return wheelDelta; }
 
 	/**
