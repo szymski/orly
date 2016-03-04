@@ -6,14 +6,15 @@ class Texture {
  private:
 
 	int id;
+	int width, height;
 
  public:
 
 	/**
 		Creates a new texture.
 	*/
-	this() {
-		id = Backend.TextureCreate();
+	this(int width, int height, ubyte* data) {
+		id = Backend.TextureCreate(width, height, data);
 	}
 
 	/**

@@ -51,6 +51,7 @@ final class Engine {
 		// Load other libraries
 		DerelictASSIMP3.load("lib/assimp.dll");
 		DerelictIL.load("lib/DevIL.dll");
+		ilInit();
 
 		// Set the options
 		Backend.SetRenderFunc(&RenderFunc);
@@ -141,7 +142,7 @@ void PrepareTheScene() {
 	GameObject camera = CurrentScene.CreateGameObject();
 	camera.AddComponent!Camera();
 	camera.AddComponent!CameraMovement();
-
+	
 
 	GameObject obj = CurrentScene.CreateGameObject();
 	obj.AddComponent!TestRenderer();

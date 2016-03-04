@@ -4,17 +4,19 @@ import std.math;
 
 class Vector3 {
  private:
+
 	float x = 0, y = 0, z = 0;
 
  public:
+
 	this() {
 	
 	}
 
 	this(float x, float y, float z) {
-		X = x;
-		Y = y;
-		Z = z;
+		this.x = x;
+		this.y = y;
+		this.z = z;
 	}
 
 	@property ref float X() { return x; }

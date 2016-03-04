@@ -4,16 +4,18 @@ import std.math;
 
 class Vector2 {
  private:
+
 	float x, y;
 
  public:
+
 	this() {
 	
 	}
 
 	this(float x, float y) {
-		X = x;
-		Y = y;
+		this.x = x;
+		this.y = y;
 	}
 
 	@property ref float X() { return x; }

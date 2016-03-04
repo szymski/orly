@@ -82,7 +82,7 @@ interface IBackend {
 		Textures
 	*/
 
-	int TextureCreate();
+	int TextureCreate(int width, int height, ubyte* data);
 	void TextureDestroy(int id);
 	void TextureBind(int id);
 	void TextureUnbind();

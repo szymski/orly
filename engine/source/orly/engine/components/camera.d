@@ -15,16 +15,17 @@ class Camera : Component {
  public:
 	
 	float fov = 90;
+	float zNear = 0.1f, zFar = 1000f;
 	Matrix4x4 projectionMatrix = new Matrix4x4();
 	
 	this() {
 		main = this;
-		projectionMatrix.InitPerspective(fov, 0.1f, 500f);
 	}
 
 	void SetupRendering() {
 		import derelict.opengl3.gl;
 
+		projectionMatrix.InitPerspective(fov, zNear, zFar);
 		Backend.SetMatrixMode(MatrixMode.Projection);
 		Backend.SetViewport(0, 0, Screen.Width, Screen.Height);
 		Backend.SetMatrix(projectionMatrix);

@@ -29,6 +29,13 @@ class SDL2 : IBackend {
 
         if(!SDL_Init(SDL_INIT_VIDEO) < 0)
             throw new Exception("SDL could not be initialized! Error: " ~ to!string(SDL_GetError()));
+
+		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+		SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
+		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     }
 
 	void OpenWindow() {
@@ -267,20 +274,33 @@ class SDL2 : IBackend {
 		Textures
 	*/
 
-	int TextureCreate() {
-		return -1;
+	int TextureCreate(int width, int height, ubyte* data) {
+		uint id;
+
+		glGenTextures(1, &id);
+		glBindTexture(GL_TEXTURE_2D, id);
+		
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+		return id;
 	}
 
 	void TextureDestroy(int id) {
-		
+		glDeleteTextures(1, cast(uint*)&id);
 	}
 
 	void TextureBind(int id) {
-		
+		glBindTexture(GL_TEXTURE_2D, id);
 	}
 
 	void TextureUnbind() {
-		
+		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
 	/*
