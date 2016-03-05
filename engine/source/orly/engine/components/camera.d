@@ -25,6 +25,10 @@ class Camera : Component {
 	void SetupRendering() {
 		import derelict.opengl3.gl;
 
+		Backend.EnableDepth();
+		Backend.EnableFaceCulling();
+		Backend.SetFaceCullingMode(CullingMode.Back);
+
 		projectionMatrix.InitPerspective(fov, zNear, zFar);
 		Backend.SetMatrixMode(MatrixMode.Projection);
 		Backend.SetViewport(0, 0, Screen.Width, Screen.Height);

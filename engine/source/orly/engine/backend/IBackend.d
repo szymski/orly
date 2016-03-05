@@ -15,6 +15,16 @@ enum MatrixMode {
 }
 
 /**
+	Face culling mode.
+*/
+enum CullingMode {
+	Disabled,
+	Front,
+	Back,
+	FrontAndBack
+}
+
+/**
 	Graphics backend wrapper.
 */
 interface IBackend {
@@ -52,19 +62,19 @@ interface IBackend {
 	@property string WindowTitle();
 
 	/*
-		Vertex buffers
+		Vertex arrays
 	*/
 	
-	/** Creates a vertex buffer from specified mesh and returns its id. */
-	int VertexBufferCreate(Mesh mesh);
-	/** Destroys a vertex buffer. */
-	void VertexBufferDestroy(int id);
-	/** Binds vertex buffer. */
-	void VertexBufferBind(int id);
-	/** Unbinds vertex buffer. */
-	void VertexBufferUnbind();
-	/** Draws vertex buffer. */
-	void VertexBufferDraw(int id, int size);
+	/** Creates a vertex array from specified mesh and returns its id. */
+	int VertexArrayCreate(Mesh mesh);
+	/** Destroys a vertex array. */
+	void VertexArrayDestroy(uint id);
+	/** Binds vertex array. */
+	void VertexArrayBind(int id);
+	/** Unbinds vertex array. */
+	void VertexArrayUnbind();
+	/** Draws vertex array. */
+	void VertexArrayDraw(int id, int size);
 
 	/*
 		Shaders
@@ -99,6 +109,26 @@ interface IBackend {
 
 	/** Sets current matrix mode. */
 	void SetMatrixMode(MatrixMode mode);
+
+	/*
+		Face culling
+	*/
+
+	void EnableFaceCulling();
+	void DisableFaceCulling();
+
+	/** Sets face culling mode. */
+	void SetFaceCullingMode(CullingMode mode);
+
+	/*
+		Enables / disables
+	*/
+
+	void EnableDepth();
+	void DisableDepth();
+
+	void EnableTexture2D();
+	void DisableTexture2D();
 }
 
 interface IBackendGraphics {

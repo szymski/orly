@@ -5,21 +5,22 @@ import derelict.opengl3.gl;
 import orly.engine.time;
 import orly.engine.renderer.mesh;
 import orly.engine.renderer.vertex;
-import orly.engine.renderer.vertexbuffer;
+import orly.engine.renderer.vertexarray;
 import orly.engine.renderer.shader;
 import orly.engine.assets.models.modelasset;
 import orly.engine.components.factory;
 import orly.engine.assets.textures.textureasset;
+import orly.engine.backend.ibackend;
 
 class TestRenderer : Component { 
 
 	Texture texture;
-	VertexBuffer vb;
+	VertexArray va;
 	Shader shader;
 
 	this() {
 		ModelAsset model = new ModelAsset("tris.md2");
-		vb = new VertexBuffer(model.Mesh);
+		va = new VertexArray(model.Mesh);
 
 		texture = new TextureAsset("skin.pcx").Texture;
 
@@ -52,9 +53,9 @@ class TestRenderer : Component {
 
 		glColor3f(1f, 1f, 1f);
 		//shader.Bind();
-		glEnable(GL_TEXTURE_2D);
+		Backend.EnableTexture2D();
 		texture.Bind();
-		vb.Render();
+		va.Render();
 		//shader.Unbind();
 	}
 

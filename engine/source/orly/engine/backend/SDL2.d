@@ -183,41 +183,53 @@ class SDL2 : IBackend {
 		Vertex buffers
 	*/
  
-	int VertexBufferCreate(Mesh mesh) {
+	int VertexArrayCreate(Mesh mesh) {
+		// Vertex array
 		uint id;
+		glGenVertexArrays(1, &id);
+		glBindVertexArray(id);
 
-		glGenBuffers(1, &id);
-		glBindBuffer(GL_ARRAY_BUFFER, id);
+		// Vertex buffer
+		uint verticesId;
+		glGenBuffers(1, &verticesId);
+		glBindBuffer(GL_ARRAY_BUFFER, verticesId);
 		auto data = mesh.DataXYZ;
 		glBufferData(GL_ARRAY_BUFFER, data.length * 4, data.ptr, GL_STATIC_DRAW);
+	
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, null);
+
+		// TexCoords buffer
+		uint uvId;
+		glGenBuffers(1, &uvId);
+		glBindBuffer(GL_ARRAY_BUFFER, uvId);
+		auto dataUV = mesh.DataUV;
+		glBufferData(GL_ARRAY_BUFFER, dataUV.length * 4, dataUV.ptr, GL_STATIC_DRAW);
+
+		glEnableVertexAttribArray(8);
+		glVertexAttribPointer(8, 2, GL_FLOAT, GL_FALSE, 0, null);
+
+		// Clear
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindVertexArray(0);
 
 		return id;
 	}
 
-	void VertexBufferDestroy(int id) {
-		
+	void VertexArrayDestroy(uint id) {
+		glDeleteVertexArrays(1, &id);
 	}
 
-	void VertexBufferBind(int id) {
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, id);
+	void VertexArrayBind(int id) {
+		glBindVertexArray(id);
 	}
 
-	void VertexBufferUnbind() {
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	void VertexArrayUnbind() {
+		glBindVertexArray(0);
 	}
 
-	void VertexBufferDraw(int id, int size) {
-		glEnableVertexAttribArray(0);
-
-		glBindBuffer(GL_ARRAY_BUFFER, id);
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, 3 * 4, null);
-
+	void VertexArrayDraw(int id, int size) {
 		glDrawArrays(GL_TRIANGLES, 0, size);
-			
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-		glDisableVertexAttribArray(0);
 	}
     
 	/*
@@ -331,5 +343,47 @@ class SDL2 : IBackend {
 
 	void SetMatrixMode(MatrixMode mode) {
 		glMatrixMode(EngineMatrixModeToOpenGL[mode]);
+	}
+
+	/*
+		Face culling
+	*/
+
+	void EnableFaceCulling() {
+		glEnable(GL_CULL_FACE);
+	}
+
+	void DisableFaceCulling() {
+		glDisable(GL_CULL_FACE);
+	}
+
+	const int[] EngineCullingModeToOpenGL = [
+		CullingMode.Back: GL_BACK,
+		CullingMode.Front: GL_FRONT,
+		CullingMode.FrontAndBack: GL_FRONT_AND_BACK
+	];
+
+	void SetFaceCullingMode(CullingMode mode) {
+		glCullFace(EngineCullingModeToOpenGL[mode]);
+	}
+
+	/*
+		Enables / disables
+	*/
+
+	void EnableDepth() {
+		glEnable(GL_DEPTH_TEST);
+	}
+
+	void DisableDepth() {
+		glDisable(GL_DEPTH_TEST);
+	}
+
+	void EnableTexture2D() {
+		glEnable(GL_TEXTURE_2D);
+	}
+
+	void DisableTexture2D() {
+		glDisable(GL_TEXTURE_2D);
 	}
 }

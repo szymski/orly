@@ -1,5 +1,6 @@
 module orly.engine.math.matrix4x4;
 
+import orly.engine.screen;
 import std.math;
 
 class Matrix4x4 {
@@ -24,7 +25,7 @@ class Matrix4x4 {
 	void InitPerspective(float fov, float zNear, float zFar) {
 		float scale = 1f / tan(fov / 2f * PI / 180f);
 
-		m[0][0] = scale;	m[0][1] = 0;	m[0][2] = 0;	m[0][3] = 0; 
+		m[0][0] = scale / (cast(float)Screen.Width / cast(float)Screen.Height);	m[0][1] = 0;	m[0][2] = 0;	m[0][3] = 0; 
 		m[1][0] = 0;	m[1][1] = scale;	m[1][2] = 0;	m[1][3] = 0; 
 		m[2][0] = 0;	m[2][1] = 0;	m[2][2] = -zFar / (zFar - zNear);	m[2][3] = -1f; 
 		m[3][0] = 0;	m[3][1] = 0;	m[3][2] = -zFar * zNear / (zFar - zNear);	m[3][3] = 0; 
