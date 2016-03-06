@@ -14,7 +14,7 @@ static class Log {
 		Prints a message to the console.
 	*/
 	static void Print(T...)(T args) {
-		string str = "<" ~ Clock.currTime().toISOExtString() ~ "> ";
+		string str = "<" ~ Clock.currTime().toSimpleString() ~ "> ";
 
 		foreach(obj; args)
 			str ~= to!string(obj);
@@ -28,7 +28,7 @@ static class Log {
 		Prints a debug message to the console.
 	*/
 	static void PrintDebug(T...)(T args) {
-		string str = "<" ~ Clock.currTime().toISOExtString() ~ "> DEBUG: ";
+		string str = "<" ~ Clock.currTime().toSimpleString() ~ "> DEBUG: ";
 
 		foreach(obj; args)
 			str ~= to!string(obj);
@@ -42,7 +42,7 @@ static class Log {
 		Prints an error message to the console.
 	*/
     static void PrintError(T...)(T args) {
-		string str = "<" ~ Clock.currTime().toISOExtString() ~ "> ERROR: ";
+		string str = "<" ~ Clock.currTime().toSimpleString() ~ "> ERROR: ";
 
 		foreach(obj; args)
 			str ~= to!string(obj);

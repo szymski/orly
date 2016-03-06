@@ -67,12 +67,13 @@ class SDL2 : IBackend {
 					break;
 
 				case SDL_KEYDOWN:
-					if(event.key.repeat) break;
-					Keyboard.SetKey(cast(KeyboardKey)event.key.keysym.sym, true);
+					enum mask = 1 << 30;
+					Keyboard.SetKey(cast(KeyboardKey)~((~event.key.keysym.sym) | mask), true);
 					break;
 
-				case SDL_KEYUP:
-					Keyboard.SetKey(cast(KeyboardKey)event.key.keysym.sym, false);
+				case SDL_KEYUP:	
+					enum mask = 1 << 30;
+					Keyboard.SetKey(cast(KeyboardKey)~((~event.key.keysym.sym) | mask), false);
 					break;
 
 				case SDL_MOUSEBUTTONDOWN:
@@ -148,7 +149,7 @@ class SDL2 : IBackend {
 		SDL_SetWindowSize(window, width, height);
 	}
 
-	@property void WindowTitle(string title) { SDL_SetWindowTitle(window, cast(char*)title); }
+	@property void WindowTitle(string title) { SDL_SetWindowTitle(window, title.ptr); }
 	@property string WindowTitle() { return to!string(SDL_GetWindowTitle(window)); }
 
     /*

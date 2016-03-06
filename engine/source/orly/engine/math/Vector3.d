@@ -90,6 +90,11 @@ class Vector3 {
 		static if(op == "*") return new Vector3(x * other, y * other, z * other);
 		else static if(op == "/") return new Vector3(x / other, y / other, z / other);
 	}
+
+	Vector3 opUnary(string op)() if (op == "-")
+    {
+        return new Vector3(-x, -y, -z);
+    }
 }
 
 unittest {

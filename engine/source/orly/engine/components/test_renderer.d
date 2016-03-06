@@ -48,8 +48,8 @@ class TestRenderer : Component {
 	}
 
 	override public void OnRender() {
-		glTranslatef(15f, -30f, -15f);
-		glRotatef(100, 0, 1, 0);
+		//glTranslatef(15f, -30f, -15f);
+		//glRotatef(100, 0, 1, 0);
 
 		glColor3f(1f, 1f, 1f);
 		//shader.Bind();

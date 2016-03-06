@@ -131,9 +131,4 @@ interface IBackend {
 	void DisableTexture2D();
 }
 
-interface IBackendGraphics {
-	
-}
-
 IBackend Backend;
-IBackendGraphics BackendGraphics;

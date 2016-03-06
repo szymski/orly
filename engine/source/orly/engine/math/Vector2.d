@@ -82,6 +82,11 @@ class Vector2 {
 		static if(op == "*") return new Vector2(x * other, y * other);
 		else static if(op == "/") return new Vector2(x / other, y / other);
 	}
+
+	Vector2 opUnary(string op)() if (op == "-")
+    {
+        return new Vector2(-x, -y);
+    }
 }
 
 unittest {

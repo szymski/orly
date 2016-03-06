@@ -32,7 +32,7 @@ class GameObject {
 		Updates the game object
 	*/
 	void Update() {
-		foreach(Component c; components)
+		foreach(c; components)
 			c.OnUpdate();
 	}
 
@@ -40,7 +40,7 @@ class GameObject {
 		Renders the game object
 	*/
 	void Render() {
-		foreach(Component c; components)
+		foreach(c; components)
 			c.OnRender();
 	}
 

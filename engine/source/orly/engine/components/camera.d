@@ -23,8 +23,6 @@ class Camera : Component {
 	}
 
 	void SetupRendering() {
-		import derelict.opengl3.gl;
-
 		Backend.EnableDepth();
 		Backend.EnableFaceCulling();
 		Backend.SetFaceCullingMode(CullingMode.Back);
@@ -35,15 +33,19 @@ class Camera : Component {
 		Backend.SetMatrix(projectionMatrix);
 		
 		Backend.SetMatrixMode(MatrixMode.ModelView);	
-		Matrix4x4 matrix = new Matrix4x4();
-		matrix.InitIdentity();
-		Backend.SetMatrix(matrix);
+		Backend.SetMatrix(GetViewMatrix());
+	}
 
+	Matrix4x4 GetViewMatrix() {
+		auto translationMatrix = new Matrix4x4();
+		auto rotationMatrix = new Matrix4x4();
+		auto rotationMatrix2 = new Matrix4x4();
 
-		glRotatef(-GameObject.Transform.Rotation.Y, 1, 0, 0);
-		glRotatef(-GameObject.Transform.Rotation.X, 0, 1, 0);
+		translationMatrix.InitTranslation(-GameObject.Transform.Position);
+		rotationMatrix.InitRotation(-GameObject.Transform.Rotation.X, 0, 0);
+		rotationMatrix2.InitRotation(0, -GameObject.Transform.Rotation.Y, 0);
 
-		glTranslatef(-GameObject.Transform.Position.X, -GameObject.Transform.Position.Y, -GameObject.Transform.Position.Z);
+		return rotationMatrix * rotationMatrix2 * translationMatrix;
 	}
 	
  static:
