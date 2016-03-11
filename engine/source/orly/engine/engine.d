@@ -120,15 +120,16 @@ final class Engine {
 
 
 
+import orly.engine.components.factory;
 
+mixin RegisterComponents;
 
 class Test : Component {
 	
 	override public void OnUpdate() {
-		
+		if(Keyboard.GetKeyDown(KeyboardKey.Q))
+			Mouse.LockCursor = !Mouse.LockCursor;
 	}
-
-	
 	
 }
 
@@ -142,6 +143,7 @@ void PrepareTheScene() {
 	GameObject camera = CurrentScene.CreateGameObject();
 	camera.AddComponent!Camera();
 	camera.AddComponent!CameraMovement();
+	camera.AddComponent!Test();
 	
 
 	GameObject obj = CurrentScene.CreateGameObject();

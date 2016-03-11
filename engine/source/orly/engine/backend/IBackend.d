@@ -61,6 +61,9 @@ interface IBackend {
 	@property void WindowTitle(string title);
 	@property string WindowTitle();
 
+	@property void LockCursor(bool value);
+	@property bool LockCursor();
+
 	/*
 		Vertex arrays
 	*/

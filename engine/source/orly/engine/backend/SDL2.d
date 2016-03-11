@@ -12,6 +12,7 @@ import std.datetime;
 import std.math;
 import orly.engine.renderer.shader;
 import std.string;
+import core.thread;
 
 /**
 	SDL 2.0 Backend
@@ -21,6 +22,7 @@ class SDL2 : IBackend {
     SDL_Window* window;
 	SDL_Renderer* renderer;
 	int maxFPS = -1;
+	bool lockCursor;
 
 	void delegate() renderFunc;
 
@@ -152,6 +154,10 @@ class SDL2 : IBackend {
 	@property void WindowTitle(string title) { SDL_SetWindowTitle(window, title.ptr); }
 	@property string WindowTitle() { return to!string(SDL_GetWindowTitle(window)); }
 
+	@property void LockCursor(bool value) { SDL_SetRelativeMouseMode(lockCursor = value); }
+
+	@property bool LockCursor() { return lockCursor; }
+
     /*
         Update
     */
@@ -170,13 +176,14 @@ class SDL2 : IBackend {
 
 		// FPS limiting
 		if(maxFPS != -1) {
-			uint desiredMs = 1000 / maxFPS; // How much time the frame should take
+			long desiredNs = 1_000_000_000 / maxFPS; // How much time the frame should take
 
-			if(desiredMs - sw.peek.msecs > 0)
-				SDL_Delay(cast(uint)(desiredMs - sw.peek.msecs));
+			if(desiredNs - sw.peek.nsecs >= 0)
+				Thread.sleep(nsecs(desiredNs - sw.peek.nsecs));
+				//SDL_Delay(cast(uint)(desiredMs - sw.peek.msecs));
 
-			sw.start();
 			sw.reset();
+			sw.start();
 		}
     }
 

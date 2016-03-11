@@ -11,6 +11,8 @@ import orly.engine.input.keyboard;
 import orly.engine.input.mouse;
 import orly.engine.time;
 
+mixin RegisterComponents;
+
 class CameraMovement : Component {
 	
 	override public void OnUpdate() {
@@ -42,5 +44,3 @@ class CameraMovement : Component {
 	}
 
 }
-
-mixin RegisterComponent!CameraMovement;

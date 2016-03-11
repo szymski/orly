@@ -6,6 +6,8 @@ import orly.engine.math.vector3;
 import orly.engine.components.factory;
 import orly.engine.math.matrix4x4;
 
+mixin RegisterComponents;
+
 class Transform : Component {
  private:
 	Vector3 position = new Vector3();
@@ -30,5 +32,3 @@ class Transform : Component {
 		return translationMatrix * (rotationMatrix * scaleMatrix);
 	}
 }
-
-mixin RegisterComponent!Transform;

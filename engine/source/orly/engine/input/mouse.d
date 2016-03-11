@@ -1,5 +1,6 @@
 module orly.engine.input.mouse;
 
+import orly.engine.backend.ibackend;
 import orly.engine.math.vector2;
 
 final static class Mouse {
@@ -23,6 +24,11 @@ final static class Mouse {
 
 	/** Returns mouse wheel delta. */
 	@property static ref float WheelDelta() { return wheelDelta; }
+
+	/** If true, the cursor will be locked in one place. */
+	@property static bool LockCursor() { return Backend.LockCursor; }
+	/** If true, the cursor will be locked in one place. */
+	@property static void LockCursor(bool value) { Backend.LockCursor = value; }
 
 	/**
 		Returns true, if the specified button is being held.

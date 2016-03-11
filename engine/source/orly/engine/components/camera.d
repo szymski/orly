@@ -8,6 +8,8 @@ import orly.engine.components.factory;
 import orly.engine.backend.ibackend;
 import orly.engine.screen;
 
+mixin RegisterComponents;
+
 class Camera : Component {
  private:
 	
@@ -52,5 +54,3 @@ class Camera : Component {
 
 	Camera main;
 }
-
-mixin RegisterComponent!Camera;

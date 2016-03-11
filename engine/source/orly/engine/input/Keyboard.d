@@ -1,5 +1,7 @@
 module orly.engine.input.keyboard;
 
+import std.algorithm.iteration;
+
 public import orly.engine.input.keyboardkeys;
 
 final static class Keyboard {
@@ -54,5 +56,39 @@ final static class Keyboard {
 		}
 	}
 
-	// TODO: Get all keys
+	/**
+		Returns all held keys.
+	*/
+	@property static KeyboardKey[] AllKeys() {
+		KeyboardKey[] allKeys;
+
+		foreach(i, key; keys) if(key)
+			allKeys ~= cast(KeyboardKey)i;
+
+		return allKeys;
+	}
+
+	/**
+		Returns all keys pressed in current frame.
+	*/
+	@property static KeyboardKey[] AllDownKeys() {
+		KeyboardKey[] allKeys;
+
+		foreach(i, key; downKeys) if(key)
+			allKeys ~= cast(KeyboardKey)i;
+
+		return allKeys;
+	}
+
+	/**
+		Returns all keys released in current frame.
+	*/
+	@property static KeyboardKey[] AllUpKeys() {
+		KeyboardKey[] allKeys;
+
+		foreach(i, key; upKeys) if(key)
+			allKeys ~= cast(KeyboardKey)i;
+
+		return allKeys;
+	}
 }

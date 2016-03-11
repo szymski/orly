@@ -43,31 +43,22 @@ static class ComponentFactory {
 	Registering mixin
 */
 
+alias ToType(alias T) = T;
+
 /**
-	Mixin used to register a component.
-	You should use it once for each component.
+	Mixin used to register all components from current module.
 */
-mixin template RegisterComponent(T) {
+mixin template RegisterComponents(string moduleName = __MODULE__) {
 	static this() {
-		ComponentFactory.RegisterComponent(__traits(identifier, T), delegate() {
-			return new T();
-		});
+		mixin(`import mod = ` ~ moduleName ~ `;`);
+		
+		foreach(m; __traits(allMembers, mod)) static if(__traits(compiles, __traits(getMember, mod, m))) {
+			alias member = ToType!(__traits(getMember, mod, m));
+
+			static if(is(member : Component))
+				ComponentFactory.RegisterComponent(__traits(identifier, member), delegate() {
+					return new member();
+				});
+		}
 	}
-}
-
-import std.string;
-
-mixin template PrintMembers() {
-	import std.string : replace;
-	import std.stdio : writeln;
-	mixin(q{
-			static this() {
-				import mod = %moduleName%;
-
-				foreach(m; __traits(allMembers, mod)) {
-					if(is(m : Component))
-					writeln(m);
-				}
-			}
-		}.replace("%moduleName%", __MODULE__));
 }

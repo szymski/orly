@@ -12,6 +12,8 @@ import orly.engine.components.factory;
 import orly.engine.assets.textures.textureasset;
 import orly.engine.backend.ibackend;
 
+mixin RegisterComponents;
+
 class TestRenderer : Component { 
 
 	Texture texture;
@@ -60,5 +62,3 @@ class TestRenderer : Component {
 	}
 
 }
-
-mixin RegisterComponent!TestRenderer;
