@@ -19,7 +19,7 @@ final class Scene {
 		Updates the scene.
 	*/
 	void Update() {
-		foreach(GameObject obj; gameObjects)
+		foreach(obj; gameObjects)
 			obj.Update();
 	}
 
@@ -30,7 +30,7 @@ final class Scene {
 		if(Camera.main !is null)
 			Camera.main.SetupRendering();
 
-		foreach(GameObject obj; gameObjects)
+		foreach(obj; gameObjects)
 			obj.Render();
 	}
 

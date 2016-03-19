@@ -10,7 +10,7 @@ alias GameObject _GameObject;
 */
 class Component {
  private:
-
+	
 	_GameObject gameObject;
 
  public:

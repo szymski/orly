@@ -1,6 +1,7 @@
 module orly.engine.math.vector2;
 
 import std.math;
+import std.string : format;
 
 class Vector2 {
  private:
@@ -10,7 +11,8 @@ class Vector2 {
  public:
 
 	this() {
-	
+		x = 0;
+		y = 0;
 	}
 
 	this(float x, float y) {
@@ -21,15 +23,22 @@ class Vector2 {
 	@property ref float X() { return x; }
 	@property ref float Y() { return y; }
 
+	/** Returns the length of the vector. **/
 	@property float Length() { return sqrt(x * x + y * y); }
 
+	/**
+		Returns a normalized vector.
+	*/
 	@property Vector2 Normalized() {
 		float m = Length;
 		return new Vector2(x / m, y / m);
 	}
 
-	static float Distance(Vector2 left, Vector2 right) {
-		return (left - right).Length;
+	/**
+		Returns a copy of the vector.
+	*/
+	Vector2 Copy() {
+		return new Vector2(x, y);
 	}
 
 	/*
@@ -87,6 +96,20 @@ class Vector2 {
     {
         return new Vector2(-x, -y);
     }
+
+	override string toString() {
+		return format("Vector2 { %f, %f }", x, y);
+	}
+
+ static:
+
+	/**
+		Returns distance between two vectors.
+	*/
+	float Distance(Vector2 left, Vector2 right) {
+		return (left - right).Length;
+	}
+
 }
 
 unittest {

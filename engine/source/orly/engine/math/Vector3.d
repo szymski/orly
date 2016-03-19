@@ -1,16 +1,20 @@
 module orly.engine.math.vector3;
 
+import orly.engine.math.quaternion;
 import std.math;
+import std.string : format;
 
 class Vector3 {
  private:
 
-	float x = 0, y = 0, z = 0;
+	float x , y , z;
 
  public:
 
 	this() {
-	
+		x = 0;
+		y = 0;
+		z = 0;
 	}
 
 	this(float x, float y, float z) {
@@ -23,15 +27,43 @@ class Vector3 {
 	@property ref float Y() { return y; }
 	@property ref float Z() { return z; }
 
+	/** Returns the length of the vector. **/
 	@property float Length() { return sqrt(x * x + y * y + z * z); }
 
+	/**
+		Returns a normalized vector.
+	*/
 	@property Vector3 Normalized() {
 		float m = Length;
 		return new Vector3(x / m, y / m, z / m);
 	}
 
-	static float Distance(Vector3 left, Vector3 right) {
-		return (left - right).Length;
+	/**
+		Rotates the vector.
+	*/
+	Vector3 Rotate(Quaternion rotation) {
+		auto w = rotation * this * rotation.Conjugated;
+		x = w.X;
+		y = w.Y;
+		z = w.Z;
+
+		return this;
+	}
+
+	/**
+		Returns a rotated vector.
+	*/
+	Vector3 Rotated(Quaternion rotation) {
+		auto v = this.Copy;
+		v.Rotate(rotation);
+		return v;
+	}
+
+	/**
+		Returns a copy of the vector.
+	*/
+	Vector3 Copy() {
+		return new Vector3(x, y, z);
 	}
 
 	/*
@@ -95,6 +127,19 @@ class Vector3 {
     {
         return new Vector3(-x, -y, -z);
     }
+
+	override string toString() {
+		return format("Vector3 { %f, %f, %f }", x, y, z);
+	}
+
+ static:
+
+	/**
+		Returns distance between two vectors.
+	*/
+	float Distance(Vector3 left, Vector3 right) {
+		return (left - right).Length;
+	}
 }
 
 unittest {

@@ -8,6 +8,7 @@ public import orly.engine.input.keyboard;
 public import orly.engine.input.mouse;
 public import orly.engine.scene;
 public import orly.engine.gameobjects.gameobject;
+public import orly.engine.components.factory;
 public import orly.engine.components.component;
 public import orly.engine.time;
 public import orly.engine.screen;
@@ -126,11 +127,41 @@ mixin RegisterComponents;
 
 class Test : Component {
 	
-	override public void OnUpdate() {
+	override void OnUpdate() {
 		if(Keyboard.GetKeyDown(KeyboardKey.Q))
 			Mouse.LockCursor = !Mouse.LockCursor;
 	}
-	
+}
+
+import orly.engine.api;
+import orly.engine.assets.textures.textureasset;
+
+class GrassRenderer : Component {
+
+	Texture texture;
+	VertexArray va;
+	Shader shader;
+
+	this() {
+		va = new VertexArray(new Mesh([
+			Vertex(-1000, 0, -1000, 0, 10),
+			Vertex(1000, 0, -1000, 10, 10),
+			Vertex(1000, 0, 1000, 0, 0), 
+			Vertex(-1000, 0, 1000, 10, 0),
+		]), DrawType.Quads);
+
+		texture = new TextureAsset("grass.jpg").Texture;
+	}
+
+	override public void OnRender() {
+		import orly.engine.components.camera;
+		Backend.SetMatrix(Camera.main.GetViewMatrix() * GameObject.Transform.GetMatrix());
+
+		Backend.EnableTexture2D();
+		texture.Bind();
+		va.Render();
+	}
+
 }
 
 void PrepareTheScene() {
@@ -145,7 +176,10 @@ void PrepareTheScene() {
 	camera.AddComponent!CameraMovement();
 	camera.AddComponent!Test();
 	
-
 	GameObject obj = CurrentScene.CreateGameObject();
 	obj.AddComponent!TestRenderer();
+
+	GameObject obj2 = CurrentScene.CreateGameObject();
+	obj2.AddComponent!GrassRenderer();
+	obj2.Transform.Rotation = new Quaternion(new Vector3(-1, 0, 0), 180f);
 }

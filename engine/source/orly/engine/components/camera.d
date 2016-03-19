@@ -18,9 +18,10 @@ class Camera : Component {
 	
 	float fov = 90;
 	float zNear = 0.1f, zFar = 1000f;
-	Matrix4x4 projectionMatrix = new Matrix4x4();
+	Matrix4x4 projectionMatrix;
 	
 	this() {
+		projectionMatrix = new Matrix4x4();
 		main = this;
 	}
 
@@ -35,19 +36,18 @@ class Camera : Component {
 		Backend.SetMatrix(projectionMatrix);
 		
 		Backend.SetMatrixMode(MatrixMode.ModelView);	
-		Backend.SetMatrix(GetViewMatrix());
+		//Backend.SetMatrix(GetViewMatrix());
 	}
+
+	// TODO: Obliczanie macierzy tylko raz podczas danej klatki
 
 	Matrix4x4 GetViewMatrix() {
 		auto translationMatrix = new Matrix4x4();
-		auto rotationMatrix = new Matrix4x4();
-		auto rotationMatrix2 = new Matrix4x4();
+		auto rotationMatrix = GameObject.Transform.Rotation.Conjugated.Matrix;
 
 		translationMatrix.InitTranslation(-GameObject.Transform.Position);
-		rotationMatrix.InitRotation(-GameObject.Transform.Rotation.X, 0, 0);
-		rotationMatrix2.InitRotation(0, -GameObject.Transform.Rotation.Y, 0);
 
-		return rotationMatrix * rotationMatrix2 * translationMatrix;
+		return rotationMatrix * translationMatrix;
 	}
 	
  static:

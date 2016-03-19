@@ -2,7 +2,7 @@ module orly.engine.gameobjects.gameobject;
 
 import orly.engine.components.component;
 import orly.engine.components.transform;
-import std.container.array;
+import orly.engine.components.factory;
 
 alias Transform _Transform;
 
@@ -24,12 +24,12 @@ class GameObject {
 	@property ref _Transform Transform() { return transform; }
 
 	/**
-		Returns a list of the components
+		Returns a list of the components.
 	*/
 	@property Component[] Components() { return components; }
 
 	/**
-		Updates the game object
+		Updates the game object.
 	*/
 	void Update() {
 		foreach(c; components)
@@ -37,15 +37,15 @@ class GameObject {
 	}
 
 	/**
-		Renders the game object
+		Renders the game object.
 	*/
 	void Render() {
-		foreach(c; components)
+		foreach(c; components) 
 			c.OnRender();
 	}
 
 	/**
-		Adds a new component of specified type
+		Adds a new component of specified type.
 	*/
 	T AddComponent(T : Component)() {
 		T component = new T();
@@ -56,7 +56,7 @@ class GameObject {
 	}
 
 	/**
-		Gets the component of specified type
+		Gets the component of specified type.
 	*/
 	T GetComponent(T : Component)() {
 		foreach(component; components)
@@ -67,7 +67,7 @@ class GameObject {
 	}
 
 	/**
-		Removes the component of specified type
+		Removes the component of specified type.
 	*/
 	void RemoveComponent(T : Component)() {
 		for(int i = 0; i < components.length; i++)

@@ -12,7 +12,7 @@ class Matrix4x4 {
 	float[4][4] m;
 
 	@property void* Pointer() { return m.ptr; }
-	
+
 	void InitIdentity() {
 		m[0][0] = 1;	m[1][0] = 0;	m[2][0] = 0;	m[3][0] = 0; 
 		m[0][1] = 0;	m[1][1] = 1;	m[2][1] = 0;	m[3][1] = 0; 
@@ -64,7 +64,7 @@ class Matrix4x4 {
 	}
 
 	/**
-		Setups translation matrix.
+		Setups rotation matrix.
 	*/
 	void InitRotation(float x, float y, float z) {
 		Matrix4x4 rx = new Matrix4x4();
@@ -94,11 +94,26 @@ class Matrix4x4 {
 	}
 
 	/**
-		Setups translation matrix.
+		Setups rotation matrix.
 	*/
 	void InitRotation(Vector3 v) {
 		InitRotation(v.X, v.Y, v.Z);
 	}
+
+	/**
+		Setups rotation matrix.
+	*/
+	void InitRotation(Vector3 forward, Vector3 up, Vector3 right) {
+		alias f = forward;
+		alias u = up;
+		alias r = right;
+
+		m[0][0] = r.X;			m[1][0] = r.Y;			m[2][0] = r.Z;				m[3][0] = 0;
+		m[0][1] = u.X;			m[1][1] = u.Y;			m[2][1] = u.Z;				m[3][1] = 0;
+		m[0][2] = f.X;			m[1][2] = f.Y;			m[2][2] = f.Z;				m[3][2] = 0;
+		m[0][3] = 0;			m[1][3] = 0;			m[2][3] = 0;				m[3][3] = 1;
+	}
+
 
 	/**
 		Setups scale matrix.

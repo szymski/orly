@@ -9,6 +9,7 @@ import orly.engine.renderer.vertexarray;
 import orly.engine.renderer.shader;
 import orly.engine.assets.models.modelasset;
 import orly.engine.components.factory;
+import orly.engine.components.camera;
 import orly.engine.assets.textures.textureasset;
 import orly.engine.backend.ibackend;
 
@@ -50,8 +51,7 @@ class TestRenderer : Component {
 	}
 
 	override public void OnRender() {
-		//glTranslatef(15f, -30f, -15f);
-		//glRotatef(100, 0, 1, 0);
+		Backend.SetMatrix(Camera.main.GetViewMatrix() * GameObject.Transform.GetMatrix());
 
 		glColor3f(1f, 1f, 1f);
 		//shader.Bind();

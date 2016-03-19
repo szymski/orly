@@ -3,6 +3,7 @@ module orly.engine.backend.ibackend;
 import orly.engine.renderer.mesh;
 import orly.engine.renderer.shader;
 import orly.engine.math.matrix4x4;
+import orly.engine.renderer.vertexarray;
 
 /**
 	Graphics matrix mode enum.
@@ -77,7 +78,7 @@ interface IBackend {
 	/** Unbinds vertex array. */
 	void VertexArrayUnbind();
 	/** Draws vertex array. */
-	void VertexArrayDraw(int id, int size);
+	void VertexArrayDraw(int id, int size, DrawType drawType);
 
 	/*
 		Shaders

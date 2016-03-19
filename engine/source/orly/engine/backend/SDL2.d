@@ -3,6 +3,7 @@ module orly.engine.backend.sdl2;
 import orly.engine.engine;
 import orly.engine.backend.ibackend;
 import orly.engine.renderer.mesh;
+import orly.engine.renderer.vertexarray;
 import orly.engine.math.matrix4x4;
 import derelict.opengl3.gl;
 import derelict.sdl2.sdl;
@@ -236,8 +237,15 @@ class SDL2 : IBackend {
 		glBindVertexArray(0);
 	}
 
-	void VertexArrayDraw(int id, int size) {
-		glDrawArrays(GL_TRIANGLES, 0, size);
+	const int[] EngineDrawTypeToGL = [
+		DrawType.Points: GL_POINTS,
+		DrawType.Lines: GL_LINES,
+		DrawType.Triangles: GL_TRIANGLES,
+		DrawType.Quads: GL_QUADS,
+	];
+
+	void VertexArrayDraw(int id, int size, DrawType drawType) {
+		glDrawArrays(EngineDrawTypeToGL[drawType], 0, size);
 	}
     
 	/*
