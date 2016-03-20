@@ -16,12 +16,16 @@ class Camera : Component {
 
  public:
 	
-	float fov = 90;
-	float zNear = 0.1f, zFar = 1000f;
+	float fov;
+	float zNear, zFar;
 	Matrix4x4 projectionMatrix;
 	
 	this() {
+		fov = 90f;
+		zNear = 0.1f;
+		zFar = 10000f;
 		projectionMatrix = new Matrix4x4();
+
 		main = this;
 	}
 

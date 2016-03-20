@@ -144,13 +144,13 @@ class GrassRenderer : Component {
 
 	this() {
 		va = new VertexArray(new Mesh([
-			Vertex(-1000, 0, -1000, 0, 10),
-			Vertex(1000, 0, -1000, 10, 10),
-			Vertex(1000, 0, 1000, 0, 0), 
-			Vertex(-1000, 0, 1000, 10, 0),
+			Vertex(-3000, 0, -3000, 0, 0),
+			Vertex(3000, 0, -3000, 0, 100),
+			Vertex(3000, 0, 3000, 100, 100), 
+			Vertex(-3000, 0, 3000, 100, 0),
 		]), DrawType.Quads);
 
-		texture = new TextureAsset("grass.jpg").Texture;
+		texture = new TextureAsset("chess.png").Texture;
 	}
 
 	override public void OnRender() {
@@ -160,6 +160,14 @@ class GrassRenderer : Component {
 		Backend.EnableTexture2D();
 		texture.Bind();
 		va.Render();
+	}
+
+}
+
+class Another : Component {
+	
+	override public void OnUpdate() {
+		GameObject.Transform.Rotation *= new Quaternion(new Vector3(0, 1, 0), Time.DeltaTime * 40f);
 	}
 
 }
@@ -178,6 +186,7 @@ void PrepareTheScene() {
 	
 	GameObject obj = CurrentScene.CreateGameObject();
 	obj.AddComponent!TestRenderer();
+	obj.AddComponent!Another();
 
 	GameObject obj2 = CurrentScene.CreateGameObject();
 	obj2.AddComponent!GrassRenderer();

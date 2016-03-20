@@ -26,6 +26,26 @@ enum CullingMode {
 }
 
 /**
+	Texture minifying filter.
+*/
+enum MinFilter {
+	Nearest,
+	Linear,
+	NearestMipmapNearest,
+	LinearMipmapLinear,
+	LinearMipmapNearest,
+	NearestMipmapLinear
+}
+
+/**
+	Texture magnification filter.
+*/
+enum MagFilter {
+	Nearest,
+	Linear
+}
+
+/**
 	Graphics backend wrapper.
 */
 interface IBackend {
@@ -96,10 +116,12 @@ interface IBackend {
 		Textures
 	*/
 
+	/** Creates a new texture from RGBA data. Leaves texture binded. */
 	int TextureCreate(int width, int height, ubyte* data);
 	void TextureDestroy(int id);
 	void TextureBind(int id);
 	void TextureUnbind();
+	void TextureGenerateMipmap(MinFilter min, MagFilter mag);
 
 	/*
 		Projection
@@ -135,4 +157,5 @@ interface IBackend {
 	void DisableTexture2D();
 }
 
+/** Instance of the backend. Created in engine.d. */
 IBackend Backend;

@@ -311,9 +311,6 @@ class SDL2 : IBackend {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
 		return id;
@@ -329,6 +326,26 @@ class SDL2 : IBackend {
 
 	void TextureUnbind() {
 		glBindTexture(GL_TEXTURE_2D, 0);
+	}
+
+	const int[] EngineMinFilterToOpenGL = [
+		MinFilter.Nearest: GL_NEAREST,
+		MinFilter.Linear: GL_LINEAR,
+		MinFilter.NearestMipmapNearest: GL_NEAREST_MIPMAP_NEAREST,
+		MinFilter.LinearMipmapLinear: GL_LINEAR_MIPMAP_LINEAR,
+		MinFilter.LinearMipmapNearest: GL_LINEAR_MIPMAP_NEAREST,
+		MinFilter.NearestMipmapLinear: GL_NEAREST_MIPMAP_LINEAR,
+	];
+
+	const int[] EngineMagFilterToOpenGL = [
+		MinFilter.Nearest: GL_NEAREST,
+		MinFilter.Linear: GL_LINEAR
+	];
+
+	void TextureGenerateMipmap(MinFilter min, MagFilter mag) {
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, EngineMinFilterToOpenGL[min]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, EngineMagFilterToOpenGL[mag]);
+		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 
 	/*

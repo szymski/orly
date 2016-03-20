@@ -15,6 +15,7 @@ class Texture {
 	*/
 	this(int width, int height, ubyte* data) {
 		id = Backend.TextureCreate(width, height, data);
+		Backend.TextureGenerateMipmap(MinFilter.LinearMipmapLinear, MagFilter.Linear); // TODO: Mipmapy wybierane gdzie indziej
 	}
 
 	/**
