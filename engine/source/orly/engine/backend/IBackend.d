@@ -3,6 +3,8 @@ module orly.engine.backend.ibackend;
 import orly.engine.renderer.mesh;
 import orly.engine.renderer.shader;
 import orly.engine.math.matrix4x4;
+import orly.engine.math.vector2;
+import orly.engine.math.vector3;
 import orly.engine.renderer.vertexarray;
 
 /**
@@ -43,6 +45,17 @@ enum MinFilter {
 enum MagFilter {
 	Nearest,
 	Linear
+}
+
+/**
+	Texture wrap mode.
+*/
+enum WrapMode {
+	ClampToEdge,
+	ClampToBorder,
+	MirroredRepeat,
+	Repeat,
+	MirrorClampToEdge
 }
 
 /**
@@ -109,8 +122,17 @@ interface IBackend {
 	void ProgramUse(int id);
 	void ProgramUnbind();
 	void ProgramCompile(int id);
+
 	int ShaderCreate(int program, ShaderType type, string source);
 	void ShaderDestroy(int id);
+
+	uint ProgramGetUniformLocation(int id, string name);
+
+	void ProgramSetUniformInt(int location, int variable);
+	void ProgramSetUniformFloat(int location, float variable);
+	void ProgramSetUniformVector2(int location, Vector2 variable);
+	void ProgramSetUniformVector3(int location, Vector3 variable);
+	void ProgramSetUniformMatrix4x4(int location, Matrix4x4 variable);
 
 	/*
 		Textures
@@ -122,6 +144,7 @@ interface IBackend {
 	void TextureBind(int id);
 	void TextureUnbind();
 	void TextureGenerateMipmap(MinFilter min, MagFilter mag);
+	void TextureWrapMode(WrapMode s, WrapMode t);
 
 	/*
 		Projection

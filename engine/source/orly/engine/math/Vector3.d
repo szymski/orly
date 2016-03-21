@@ -1,6 +1,7 @@
 module orly.engine.math.vector3;
 
 import orly.engine.math.quaternion;
+import orly.engine.math.utils;
 import std.math;
 import std.string : format;
 
@@ -35,6 +36,10 @@ class Vector3 {
 	*/
 	@property Vector3 Normalized() {
 		float m = Length;
+
+		if(m == 0)
+			return Copy;
+
 		return new Vector3(x / m, y / m, z / m);
 	}
 

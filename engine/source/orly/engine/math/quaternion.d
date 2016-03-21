@@ -29,6 +29,8 @@ class Quaternion {
 	}
 
 	this(Vector3 axis, float angle) {
+		axis = axis.Normalized;
+
 		float sinHalfAngle = sin(angle / 180f * PI / 2f);
 		float cosHalfAngle = cos(angle / 180f * PI / 2f);
 
@@ -97,21 +99,50 @@ class Quaternion {
 
 	void opOpAssign(string op)(Quaternion other) {
 		static if(op == "*") {
-			x = (((w * other.x) + (x * other.w)) + (y * other.z)) - (z * other.y);
-			y = (((w * other.y) + (y * other.w)) + (z * other.x)) - (x * other.z);
-			z = (((w * other.z) + (z * other.w)) + (x * other.y)) - (y * other.x);
-			w = (((w * other.w) - (x * other.x)) - (y * other.y)) - (z * other.z);
-			Normalize();
+			float lx = x;
+            float ly = y;
+            float lz = z;
+            float lw = w;
+
+            float rx = other.x;
+            float ry = other.y;
+            float rz = other.z;
+            float rw = other.w;
+
+            float a = (ly * rz - lz * ry);
+            float b = (lz * rx - lx * rz);
+            float c = (lx * ry - ly * rx);
+            float d = (lx * rx + ly * ry + lz * rz);
+
+            x = (lx * rw + rx * lw) + a;
+            y = (ly * rw + ry * lw) + b;
+            z = (lz * rw + rz * lw) + c;
+            w = lw * rw - d;
 		}
 	}
 
 	Quaternion opBinary(string op)(Quaternion other) {
 		static if(op == "*")
+			float lx = x;
+			float ly = y;
+			float lz = z;
+			float lw = w;
+
+			float rx = other.x;
+			float ry = other.y;
+			float rz = other.z;
+			float rw = other.w;
+
+			float a = (ly * rz - lz * ry);
+			float b = (lz * rx - lx * rz);
+			float c = (lx * ry - ly * rx);
+			float d = (lx * rx + ly * ry + lz * rz);
+
 			return new Quaternion(
-				(((w * other.x) + (x * other.w)) + (y * other.z)) - (z * other.y),
-				(((w * other.y) + (y * other.w)) + (z * other.x)) - (x * other.z),
-				(((w * other.z) + (z * other.w)) + (x * other.y)) - (y * other.x),
-				(((w * other.w) - (x * other.x)) - (y * other.y)) - (z * other.z)
+				(lx * rw + rx * lw) + a,
+				(ly * rw + ry * lw) + b,
+				(lz * rw + rz * lw) + c,
+				lw * rw - d
 			);
 	}
 
@@ -144,8 +175,24 @@ class Quaternion {
 }
 
 unittest {
-	auto quat = new Quaternion(new Vector3(0, 1, 0), -90f) * new Quaternion(new Vector3(-1, 0, 0), 245f) * new Quaternion(new Vector3(0, 0, 1), -34975f);
-
 	import std.stdio;
-	writeln(quat);
+
+	auto AngleAxis(float b, Vector3 a) { return new Quaternion(a, b); }
+
+	writeln(AngleAxis(-80f, new Vector3(0, 1, 0)));
+	writeln(AngleAxis(38f, new Vector3(0, 0, 1)));
+	writeln(AngleAxis(345f, new Vector3(-1, 0, 0)));
+	writeln(AngleAxis(-65f, new Vector3(1, 1, 1)));
+	writeln(AngleAxis(90f, new Vector3(0, 0, 1)));
+	writeln(AngleAxis(82f, new Vector3(0, 1, 1)));
+
+	writeln(PI);
+
+	//auto q = new Quaternion(new Vector3(0, 1, 0), -80f);
+	//q *= new Quaternion(new Vector3(-1, 0, 0), 18f);
+	//q *= new Quaternion(new Vector3(1, 0, 0), 67f);
+	//q *= new Quaternion(new Vector3(0, 0, 1), -35f);
+
+	
+	//writeln(q);
 }

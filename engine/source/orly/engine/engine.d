@@ -121,6 +121,15 @@ final class Engine {
 
 
 
+
+
+
+
+
+
+
+
+
 import orly.engine.components.factory;
 
 mixin RegisterComponents;
@@ -153,7 +162,7 @@ class GrassRenderer : Component {
 		texture = new TextureAsset("chess.png").Texture;
 	}
 
-	override public void OnRender() {
+	override void OnRender() {
 		import orly.engine.components.camera;
 		Backend.SetMatrix(Camera.main.GetViewMatrix() * GameObject.Transform.GetMatrix());
 
@@ -166,11 +175,30 @@ class GrassRenderer : Component {
 
 class Another : Component {
 	
-	override public void OnUpdate() {
+	override void OnUpdate() {
 		GameObject.Transform.Rotation *= new Quaternion(new Vector3(0, 1, 0), Time.DeltaTime * 40f);
 	}
 
+	void OnPreRender() {
+	}
 }
+
+class TestShader : Shader {
+	this() {
+		super();
+
+		AddShader(ShaderType.Fragment, `
+
+				 // Derp
+
+					`);
+
+		Compile();
+	}
+}
+
+import orly.engine.components.meshrenderer;
+import orly.engine.assets.models.modelasset;
 
 void PrepareTheScene() {
 	Log.Print("Preparing a test scene");
@@ -185,7 +213,10 @@ void PrepareTheScene() {
 	camera.AddComponent!Test();
 	
 	GameObject obj = CurrentScene.CreateGameObject();
-	obj.AddComponent!TestRenderer();
+	auto renderer = obj.AddComponent!MeshRenderer();
+	renderer.Mesh = new ModelAsset("tris.md2").Mesh;
+	renderer.Texture = new TextureAsset("skin.pcx").Texture;
+	//renderer.Shader = new TestShader();
 	obj.AddComponent!Another();
 
 	GameObject obj2 = CurrentScene.CreateGameObject();

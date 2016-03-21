@@ -286,7 +286,7 @@ class SDL2 : IBackend {
 			char[1024] error;
 			int strLen;
 			glGetShaderInfoLog(shader, 1024, &strLen, error.ptr);
-			Log.Throw(new Exception("Shader compilation error: " ~ to!string(error)));
+			new Exception("Shader compilation error: " ~ to!string(error)); // TODO: Error checking probably doesn't work
 		}
 
 		glAttachShader(program, shader);
@@ -298,6 +298,31 @@ class SDL2 : IBackend {
 		glDeleteShader(id);
 	}
 
+	uint ProgramGetUniformLocation(int id, string name) {
+		return glGetUniformLocation(id, name.ptr);
+	}
+
+	void ProgramSetUniformInt(int location, int variable) {
+		glUniform1i(location, variable);
+	}
+
+	void ProgramSetUniformFloat(int location, float variable) {
+		glUniform1f(location, variable);
+	}
+
+	void ProgramSetUniformVector2(int location, Vector2 variable) {
+		glUniform2f(location, variable.X, variable.Y);
+	}
+
+	void ProgramSetUniformVector3(int location, Vector3 variable) {
+		glUniform3f(location, variable.X, variable.Y, variable.Z);
+	}
+
+	void ProgramSetUniformMatrix4x4(int location, Matrix4x4 variable) {
+		glUniformMatrix4fv(location, 1, false, cast(float*)variable.Pointer);
+	}
+
+
 	/*
 		Textures
 	*/
@@ -307,10 +332,6 @@ class SDL2 : IBackend {
 
 		glGenTextures(1, &id);
 		glBindTexture(GL_TEXTURE_2D, id);
-		
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 
 		return id;
@@ -339,13 +360,26 @@ class SDL2 : IBackend {
 
 	const int[] EngineMagFilterToOpenGL = [
 		MinFilter.Nearest: GL_NEAREST,
-		MinFilter.Linear: GL_LINEAR
+		MinFilter.Linear: GL_LINEAR,
 	];
 
 	void TextureGenerateMipmap(MinFilter min, MagFilter mag) {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, EngineMinFilterToOpenGL[min]);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, EngineMagFilterToOpenGL[mag]);
 		glGenerateMipmap(GL_TEXTURE_2D);
+	}
+
+	const int[] EngineWrapModeToOpenGL = [
+		WrapMode.ClampToEdge: GL_CLAMP_TO_EDGE,
+		WrapMode.ClampToBorder: GL_CLAMP_TO_BORDER,
+		WrapMode.MirroredRepeat: GL_MIRRORED_REPEAT,
+		WrapMode.Repeat: GL_REPEAT,
+		WrapMode.MirrorClampToEdge: GL_MIRROR_CLAMP_TO_EDGE,
+	];
+
+	void TextureWrapMode(WrapMode s, WrapMode t) {
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, EngineWrapModeToOpenGL[s]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, EngineWrapModeToOpenGL[t]);
 	}
 
 	/*

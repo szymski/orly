@@ -4,6 +4,7 @@ import orly.engine.backend.ibackend;
 import orly.engine.renderer.renderer;
 import orly.engine.renderer.mesh;
 
+// TODO: Przeniesc do ibackend'u, czy nie przeniesc do ibackend'u? Moze nawet osobny plik na enumy
 enum DrawType {
 	Points,
 	Lines,

@@ -4,6 +4,7 @@ import orly.engine.gameobjects.gameobject;
 import orly.engine.components.component;
 import orly.engine.math.vector3;
 import orly.engine.math.vector2;
+import orly.engine.math.utils;
 import orly.engine.math.quaternion;
 import orly.engine.components.factory;
 import orly.engine.components.camera;
@@ -19,21 +20,35 @@ mixin RegisterComponents;
 
 class CameraMovement : Component {
 	
-	Vector2 angles = new Vector2();
+	Vector2 angles;
+	Vector3 velocity;
+
+	this() {
+		angles = new Vector2();
+		velocity = new Vector3();
+	}
 
 	override public void OnUpdate() {
 
+		auto input = new Vector3();
+
 		if(Keyboard.GetKey(KeyboardKey.W))
-			GameObject.Transform.Position -= GameObject.Transform.Rotation.Forward * Time.DeltaTime * 200f;
+			input -= GameObject.Transform.Rotation.Forward;
 
 		if(Keyboard.GetKey(KeyboardKey.S))
-			GameObject.Transform.Position += GameObject.Transform.Rotation.Forward * Time.DeltaTime * 200f;
+			input += GameObject.Transform.Rotation.Forward;
 
 		if(Keyboard.GetKey(KeyboardKey.A))
-			GameObject.Transform.Position += GameObject.Transform.Rotation.Left * Time.DeltaTime * 200f;
+			input += GameObject.Transform.Rotation.Left;
 
 		if(Keyboard.GetKey(KeyboardKey.D))
-			GameObject.Transform.Position += GameObject.Transform.Rotation.Right * Time.DeltaTime * 200f;
+			input += GameObject.Transform.Rotation.Right;
+
+		input = input.Normalized;
+		input *= 500f;
+
+		velocity = Lerp(Time.DeltaTime * 10f, velocity, input);
+		GameObject.Transform.Position += velocity * Time.DeltaTime;
 
 		//writeln(GameObject.Transform.Position);
 
@@ -48,7 +63,8 @@ class CameraMovement : Component {
 		if(angles.Y < -89f)
 			angles.Y = -89f;
 
-		angles.X %= 360f;
+
+		//angles.X %= 360f;
 
 		//writeln(GameObject.Transform.Rotation.EulerAngles);
 
