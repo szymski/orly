@@ -59,6 +59,14 @@ enum WrapMode {
 }
 
 /**
+	Render target struct.
+*/
+struct RT {
+	int fboId;
+	int rbId;
+}
+
+/**
 	Graphics backend wrapper.
 */
 interface IBackend {
@@ -140,11 +148,25 @@ interface IBackend {
 
 	/** Creates a new texture from RGBA data. Leaves texture binded. */
 	int TextureCreate(int width, int height, ubyte* data);
+	/** Creates a new, empty texture. Leaves texture binded. */
+	int TextureCreate(int width, int height);
 	void TextureDestroy(int id);
 	void TextureBind(int id);
 	void TextureUnbind();
 	void TextureGenerateMipmap(MinFilter min, MagFilter mag);
 	void TextureWrapMode(WrapMode s, WrapMode t);
+
+	/*
+		Render targets
+	*/
+	
+	/** Creates a render target of specified size binded to specified texture. */
+	RT RenderTargetCreate(int width, int height, int textureId);
+	void RenderTargetDestroy(RT renderTarget);
+	/** Binds render target. Returns previous framebuffer id. */
+	int RenderTargetBind(RT renderTarget);
+	/** Binds render target from framebuffer id. */
+	void RenderTargetBind(int id);
 
 	/*
 		Projection

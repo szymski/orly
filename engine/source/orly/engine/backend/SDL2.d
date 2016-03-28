@@ -337,6 +337,16 @@ class SDL2 : IBackend {
 		return id;
 	}
 
+	int TextureCreate(int width, int height) {
+		uint id;
+
+		glGenTextures(1, &id);
+		glBindTexture(GL_TEXTURE_2D, id);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, null);
+
+		return id;
+	}
+
 	void TextureDestroy(int id) {
 		glDeleteTextures(1, cast(uint*)&id);
 	}
@@ -380,6 +390,46 @@ class SDL2 : IBackend {
 	void TextureWrapMode(WrapMode s, WrapMode t) {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, EngineWrapModeToOpenGL[s]);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, EngineWrapModeToOpenGL[t]);
+	}
+
+	/*
+		Render targets
+	*/
+
+	RT RenderTargetCreate(int width, int height, int textureId) {
+		RT rt;
+
+		// Create and bind framebuffer
+		glGenFramebuffers(1, cast(uint*)&rt.fboId);
+		glBindFramebuffer(GL_FRAMEBUFFER, cast(uint)rt.fboId);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureId, 0);
+
+		// Create and bind renderbuffer
+		// TODO: Saving previous id may be needed, same with fbo
+		glGenRenderbuffers(1, cast(uint*)&rt.rbId);
+		glBindRenderbuffer(GL_RENDERBUFFER, cast(uint)rt.rbId);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, cast(uint)rt.rbId);
+		glBindRenderbuffer(GL_RENDERBUFFER, 0);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+		return rt;
+	}
+
+	void RenderTargetDestroy(RT renderTarget) {
+		glDeleteRenderbuffers(1, cast(uint*)&renderTarget.rbId);
+		glDeleteFramebuffers(1, cast(uint*)&renderTarget.fboId);
+	}
+
+	int RenderTargetBind(RT renderTarget) {
+		int prevId;
+		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &prevId);
+		glBindFramebuffer(GL_FRAMEBUFFER, renderTarget.fboId);
+		return prevId;
+	}
+
+	void RenderTargetBind(int id) {
+		glBindFramebuffer(GL_FRAMEBUFFER, id);
 	}
 
 	/*

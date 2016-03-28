@@ -11,7 +11,7 @@ class Texture {
  public:
 
 	/**
-		Creates a new texture.
+		Creates a new texture from specified RGBA data.
 	*/
 	this(int width, int height, ubyte* data) {
 		id = Backend.TextureCreate(width, height, data);
@@ -19,9 +19,24 @@ class Texture {
 		Backend.TextureWrapMode(WrapMode.Repeat, WrapMode.Repeat);
 	}
 
+	/**
+		Creates a new, empty texture.
+	*/
+	this(int width, int height) {
+		id = Backend.TextureCreate(width, height);
+		Backend.TextureGenerateMipmap(MinFilter.LinearMipmapLinear, MagFilter.Linear); // TODO: Mipmapy wybierane gdzie indziej
+		Backend.TextureWrapMode(WrapMode.Repeat, WrapMode.Repeat);
+	}
+
 	~this() {
 		Backend.TextureDestroy(id);
 	}
+
+	// TODO: Texture parameters
+
+	@property int Id() { return id; }
+	@property int Width() { return width; }
+	@property int Height() { return height; }
 
 	/**
 		Binds the texture.

@@ -189,7 +189,20 @@ class TestShader : Shader {
 
 		AddShader(ShaderType.Fragment, `
 
-				 // Derp
+
+				  #ifdef GL_ES
+				  precision mediump float;
+				  #endif
+
+				  uniform float time;
+				  uniform vec2 mouse;
+				  uniform vec2 resolution;
+
+				  void main( void ) 
+				  {
+				  gl_FragColor = vec4( 0.0, -mod( gl_FragCoord.y + time * 0.5, cos(gl_FragCoord.x) + 0.004 ) * 0.5, 0.0, 1.0 );
+		}
+
 
 					`);
 
@@ -216,7 +229,7 @@ void PrepareTheScene() {
 	auto renderer = obj.AddComponent!MeshRenderer();
 	renderer.Mesh = new ModelAsset("tris.md2").Mesh;
 	renderer.Texture = new TextureAsset("skin.pcx").Texture;
-	//renderer.Shader = new TestShader();
+	renderer.Shader = new TestShader();
 	obj.AddComponent!Another();
 
 	GameObject obj2 = CurrentScene.CreateGameObject();

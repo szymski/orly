@@ -1,6 +1,9 @@
 module orly.engine.renderer.shader;
 
 import orly.engine.backend.ibackend;
+import orly.engine.math.vector2;
+import orly.engine.math.vector3;
+import orly.engine.math.matrix4x4;
 import orly.engine.time;
 
 /** Shader types. */
@@ -40,7 +43,7 @@ public:
 		Adds a shader of specified type. After adding the sources, the shader must be compiled.
 	*/
 	void AddShader(ShaderType shaderType, string source) {
-		assert(!compiled, "This shader is already compiled! Can't add more shaders!");
+		assert(!compiled, "This program is already compiled! Can't add more shaders!");
 
 		if(type & shaderType)
 			throw new Exception("This type of shader is already added!");
@@ -103,8 +106,18 @@ public:
 		Sets uniform. Throws an exception, if uniform doesn't exist.
 	*/
 	void SetUniform(T)(string name, T variable) {
-		if(auto ptr = name in uniforms)
-			Backend.ProgramSetUniformFloat(*ptr, variable);
+		if(auto ptr = name in uniforms) {
+			static if(is(T : int))
+				Backend.ProgramSetUniformInt(*ptr, variable);
+			else static if(is(T : float))
+				Backend.ProgramSetUniformFloat(*ptr, variable);
+			else static if(is(T : Vector2))
+				Backend.ProgramSetUniformVector2(*ptr, variable);
+			else static if(is(T : Vector3))
+				Backend.ProgramSetUniformVector3(*ptr, variable);
+			else static if(is(T : Matrix4x4))
+				Backend.ProgramSetUniformMatrix4x4(*ptr, variable);
+		}
 		else
 			throw new Exception("No such uniform " ~ name ~ " registered.");
 	}
@@ -113,7 +126,17 @@ public:
 		Sets uniform. If uniform doesn't exist, does nothing.
 	*/
 	void SetUniformNoThrow(T)(string name, T variable) { // TODO: Moze zamiast osobnej funkcji NoThrow, zrobic template z boolean'em?
-		if(auto ptr = name in uniforms)
-			Backend.ProgramSetUniformFloat(*ptr, variable);
+		if(auto ptr = name in uniforms) {
+			static if(is(T : int))
+				Backend.ProgramSetUniformInt(*ptr, variable);
+			else static if(is(T : float))
+				Backend.ProgramSetUniformFloat(*ptr, variable);
+			else static if(is(T : Vector2))
+				Backend.ProgramSetUniformVector2(*ptr, variable);
+			else static if(is(T : Vector3))
+				Backend.ProgramSetUniformVector3(*ptr, variable);
+			else static if(is(T : Matrix4x4))
+				Backend.ProgramSetUniformMatrix4x4(*ptr, variable);
+		}
 	}
 }
