@@ -24,13 +24,10 @@ class CameraMovement : Component {
 	Vector3 velocity;
 
 	this() {
-		angles = new Vector2();
-		velocity = new Vector3();
 	}
 
 	override public void OnUpdate() {
-
-		auto input = new Vector3();
+		Vector3 input;
 
 		if(Keyboard.GetKey(KeyboardKey.W))
 			input -= GameObject.Transform.Rotation.Forward;
@@ -55,7 +52,7 @@ class CameraMovement : Component {
 		//GameObject.Transform.Rotation.Y += Mouse.Acceleration.X * 800f * Time.DeltaTime;
 		//GameObject.Transform.Rotation.X -= Mouse.Acceleration.Y * 800f * Time.DeltaTime;
 
-		angles += new Vector2(-Mouse.Acceleration.X * Time.DeltaTime * 20f, -Mouse.Acceleration.Y * Time.DeltaTime * 20f);
+		angles += Vector2(-Mouse.Acceleration.X * Time.DeltaTime * 20f, -Mouse.Acceleration.Y * Time.DeltaTime * 20f);
 
 		if(angles.Y > 89f)
 			angles.Y = 89f;
@@ -66,10 +63,8 @@ class CameraMovement : Component {
 
 		//angles.X %= 360f;
 
-		//writeln(GameObject.Transform.Rotation.EulerAngles);
-
-		GameObject.Transform.Rotation = new Quaternion(new Vector3(0, 1f, 0), angles.X);
-		GameObject.Transform.Rotation *= new Quaternion(new Vector3(1f, 0, 0), angles.Y);
+		GameObject.Transform.Rotation = new Quaternion(Vector3(0, 1f, 0), angles.X);
+		GameObject.Transform.Rotation *= new Quaternion(Vector3(1f, 0, 0), angles.Y);
 
 		
 		//writeln(GameObject.Transform.Rotation);

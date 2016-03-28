@@ -25,12 +25,11 @@ final class Scene {
 			Vertex(0, 0, 0, 0, 0),
 			Vertex(Screen.Width, 0, 0, 1, 0),
 			Vertex(Screen.Width, Screen.Height, 0, 1,  1),
-			Vertex(0, 0, Screen.Height, 0, 1),
+			Vertex(0, Screen.Height, 0, 0, 1),
 		]), DrawType.Quads);
 	} 
 
-	/** 
-		Updates the scene.
+	/**	Updates the scene.
 	*/
 	void Update() {
 		foreach(obj; gameObjects)
@@ -41,7 +40,11 @@ final class Scene {
 		Renders the scene.
 	*/
 	void Render() {
-		rt.Bind();
+		//rt.Bind();
+
+		import derelict.opengl3.gl;
+		glClearColor(0.1f, 0.1f, 0.1f, 1f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		if(Camera.main !is null)
 			Camera.main.SetupRendering();
@@ -49,20 +52,28 @@ final class Scene {
 		foreach(obj; gameObjects)
 			obj.Render();
 
-		rt.Unbind(); // TODO: Remove - debug purposes. 
-
-		auto m = new Matrix4x4();
-		m.InitOrthographic(0, 0, Screen.Width, Screen.Height, -10f, 10f);
-		Backend.SetMatrixMode(MatrixMode.Projection);
-		Backend.SetMatrix(m);
-		// TODO: Doesn't work
-		auto m2 = new Matrix4x4();
-		m2.InitIdentity();
-		Backend.SetMatrixMode(MatrixMode.ModelView);
-		Backend.SetMatrix(m2);
-
-		rt.BindTexture();
-		va.Render();
+		//rt.Unbind(); // TODO: Remove - debug purposes. 
+		//
+		//if(Camera.main !is null)
+		//    Camera.main.SetupRendering();
+		//
+		//auto m3 = new Matrix4x4();
+		////m3.InitOrthographic(0, 0, Screen.Width, Screen.Height, -1f, 1f);
+		////Backend.SetMatrixMode(MatrixMode.Projection);
+		////Backend.SetViewport(0, 0, Screen.Width, Screen.Height);
+		////Backend.SetMatrix(m3);
+		//
+		//m3.InitIdentity();
+		//auto rotM = new Matrix4x4();
+		//rotM.InitRotation(0, Time.Seconds * 50f, 0);
+		////m3 *= rotM;
+		//Backend.SetMatrixMode(MatrixMode.ModelView);
+		//Backend.SetMatrix(m3);
+		//
+		//Backend.EnableTexture2D();
+		//glColor3f(1f,1f,1f);
+		//rt.BindTexture();
+		//va.Render();
 	}
 
 	/**

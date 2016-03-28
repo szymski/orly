@@ -22,7 +22,7 @@ class RenderTarget {
 		Creates a new render target with specified size.
 	*/
 	this(int width, int height) {
-		tex = new _Texture(width, height);
+		tex = new _Texture(width, height, MinFilter.Nearest, MagFilter.Nearest);
 		rt = Backend.RenderTargetCreate(width, height, tex.Id);
 	}
 	

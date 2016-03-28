@@ -5,20 +5,14 @@ import orly.engine.math.utils;
 import std.math;
 import std.string : format;
 
-class Vector3 {
+struct Vector3 {
  private:
 
-	float x , y , z;
+	float x = 0, y = 0, z = 0;
 
  public:
 
-	this() {
-		x = 0;
-		y = 0;
-		z = 0;
-	}
-
-	this(float x, float y, float z) {
+	this(float x = 0, float y = 0, float z = 0) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -40,7 +34,7 @@ class Vector3 {
 		if(m == 0)
 			return Copy;
 
-		return new Vector3(x / m, y / m, z / m);
+		return Vector3(x / m, y / m, z / m);
 	}
 
 	/**
@@ -68,7 +62,7 @@ class Vector3 {
 		Returns a copy of the vector.
 	*/
 	Vector3 Copy() {
-		return new Vector3(x, y, z);
+		return Vector3(x, y, z);
 	}
 
 	/*
@@ -112,28 +106,28 @@ class Vector3 {
 	}
 
 	Vector3 opBinary(string op)(Vector3 other) {
-		static if(op == "+") return new Vector3(x + other.x, y + other.y, z + other.z);
-		else static if(op == "-") return new Vector3(x - other.x, y - other.y, z - other.z);
-		else static if(op == "*") return new Vector3(x * other.x, y * other.y, z * other.z);
-		else static if(op == "/") return new Vector3(x / other.x, y / other.y, z / other.z);
+		static if(op == "+") return Vector3(x + other.x, y + other.y, z + other.z);
+		else static if(op == "-") return Vector3(x - other.x, y - other.y, z - other.z);
+		else static if(op == "*") return Vector3(x * other.x, y * other.y, z * other.z);
+		else static if(op == "/") return Vector3(x / other.x, y / other.y, z / other.z);
 	}
 
 	Vector3 opBinary(string op)(int other) {
-		static if(op == "*") return new Vector3(x * other, y * other, z * other);
-		else static if(op == "/") return new Vector3(x / other, y / other, z / other);
+		static if(op == "*") return Vector3(x * other, y * other, z * other);
+		else static if(op == "/") return Vector3(x / other, y / other, z / other);
 	}
 
 	Vector3 opBinary(string op)(float other) {
-		static if(op == "*") return new Vector3(x * other, y * other, z * other);
-		else static if(op == "/") return new Vector3(x / other, y / other, z / other);
+		static if(op == "*") return Vector3(x * other, y * other, z * other);
+		else static if(op == "/") return Vector3(x / other, y / other, z / other);
 	}
 
 	Vector3 opUnary(string op)() if (op == "-")
     {
-        return new Vector3(-x, -y, -z);
+        return Vector3(-x, -y, -z);
     }
 
-	override string toString() {
+	string toString() {
 		return format("Vector3 { %f, %f, %f }", x, y, z);
 	}
 
@@ -148,18 +142,22 @@ class Vector3 {
 }
 
 unittest {
-	Vector3 vec = new Vector3(1, 2, 3);
+	Vector3 vec1;
+	assert(vec1.X == 0);
+
+	Vector3 vec = Vector3(1, 2, 3);
+	assert(vec1.X == 0);
 
 	assert(vec.X == 1);
 	assert(vec.Y == 2);
 	assert(vec.Z == 3);
 
-	vec = new Vector3(12, 8, 3);
-	auto vec2 = new Vector3(51, 8, 4);
+	vec = Vector3(12, 8, 3);
+	auto vec2 = Vector3(51, 8, 4);
 
 	assert((vec + vec2).X == 63);
 
-	vec = new Vector3(1, 1, 1);
+	vec = Vector3(1, 1, 1);
 	assert((vec * 10).X == 10);
 
 	vec *= 5f;

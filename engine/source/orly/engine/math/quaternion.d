@@ -67,17 +67,15 @@ class Quaternion {
 
 	@property Matrix4x4 Matrix()
 	{
-		Vector3 forward = new Vector3(2.0f * (X * Z - W * Y), 2.0f * (Y * Z + W * X), 1.0f - 2.0f * (X * X + Y * Y));
-		Vector3 up = new Vector3(2.0f * (X * Y + W * Z), 1.0f - 2.0f * (X * X + Z * Z), 2.0f * (Y * Z - W * X));
-		Vector3 right = new Vector3(1.0f - 2.0f * (Y * Y + Z * Z), 2.0f * (X * Y - W * Z), 2.0f * (X * Z + W * Y));
+		Vector3 forward = Vector3(2.0f * (X * Z - W * Y), 2.0f * (Y * Z + W * X), 1.0f - 2.0f * (X * X + Y * Y));
+		Vector3 up = Vector3(2.0f * (X * Y + W * Z), 1.0f - 2.0f * (X * X + Z * Z), 2.0f * (Y * Z - W * X));
+		Vector3 right = Vector3(1.0f - 2.0f * (Y * Y + Z * Z), 2.0f * (X * Y - W * Z), 2.0f * (X * Z + W * Y));
 		
-		auto m = new Matrix4x4();
-		m.InitRotation(forward, up, right);
-		return m;
+		return Matrix4x4.Rotation(forward, up, right);
 	}
 
 	@property Vector3 EulerAngles() {
-		return new Vector3(atan2(2 * x * w - 2 * y * z, 1 - 2 * x * x - 2 * z * z) / PI * 180f, atan2(2 * y * w - 2 * x * z, 1 - 2 * y * y - 2 * z * z) / PI * 180f, asin(2 * x * y + 2 * z * w) / PI * 180f);
+		return Vector3(atan2(2 * x * w - 2 * y * z, 1 - 2 * x * x - 2 * z * z) / PI * 180f, atan2(2 * y * w - 2 * x * z, 1 - 2 * y * y - 2 * z * z) / PI * 180f, asin(2 * x * y + 2 * z * w) / PI * 180f);
 	}
 
 	/*

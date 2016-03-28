@@ -10,17 +10,17 @@ final static class Mouse {
 	static bool[32] downButtons;
 	static bool[32] upButtons;
 
-	static __gshared Vector2 position = new Vector2();
-	static __gshared Vector2 acceleration = new Vector2();
+	static Vector2 position;
+	static Vector2 acceleration;
 
 	static float wheelDelta = 0f;
 
  public:
 
 	/** Returns the position of the cursor. */
-	@property static Vector2 Position() { return position; }
+	@property static ref Vector2 Position() { return position; }
 	/** Returns the acceleration of the mouse. */
-	@property static Vector2 Acceleration() { return acceleration; }
+	@property static ref Vector2 Acceleration() { return acceleration; }
 
 	/** Returns mouse wheel delta. */
 	@property static ref float WheelDelta() { return wheelDelta; }

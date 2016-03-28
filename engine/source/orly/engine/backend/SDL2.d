@@ -101,6 +101,18 @@ class SDL2 : IBackend {
         }    
     }
 
+	/**
+		Checks, if OpenGL error occured and prints it.
+	*/
+	void glCheckError(string file = __FILE__, int line = __LINE__, string func = __FUNCTION__) {
+		debug {
+			int err = glGetError();
+			if(err != 0) {
+				Log.PrintDebug("OpenGL error: ", err, "\nFile: ", file, ":", line, " - ", func);
+			}
+		}
+	}
+
  public:
 
     /*
@@ -197,6 +209,7 @@ class SDL2 : IBackend {
 		uint id;
 		glGenVertexArrays(1, &id);
 		glBindVertexArray(id);
+		glCheckError();
 
 		// Vertex buffer
 		uint verticesId;
@@ -204,9 +217,11 @@ class SDL2 : IBackend {
 		glBindBuffer(GL_ARRAY_BUFFER, verticesId);
 		auto data = mesh.DataXYZ;
 		glBufferData(GL_ARRAY_BUFFER, data.length * 4, data.ptr, GL_STATIC_DRAW);
+		glCheckError();
 	
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, null);
+		glCheckError();
 
 		// TexCoords buffer
 		uint uvId;
@@ -214,9 +229,11 @@ class SDL2 : IBackend {
 		glBindBuffer(GL_ARRAY_BUFFER, uvId);
 		auto dataUV = mesh.DataUV;
 		glBufferData(GL_ARRAY_BUFFER, dataUV.length * 4, dataUV.ptr, GL_STATIC_DRAW);
+		glCheckError();
 
 		glEnableVertexAttribArray(8);
 		glVertexAttribPointer(8, 2, GL_FLOAT, GL_FALSE, 0, null);
+		glCheckError();
 
 		// Clear
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -291,6 +308,8 @@ class SDL2 : IBackend {
 
 		glAttachShader(program, shader);
 
+		glCheckError();
+
 		return shader;
 	}
 
@@ -333,6 +352,7 @@ class SDL2 : IBackend {
 		glGenTextures(1, &id);
 		glBindTexture(GL_TEXTURE_2D, id);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+		glCheckError();
 
 		return id;
 	}
@@ -343,6 +363,7 @@ class SDL2 : IBackend {
 		glGenTextures(1, &id);
 		glBindTexture(GL_TEXTURE_2D, id);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, null);
+		glCheckError();
 
 		return id;
 	}
@@ -403,15 +424,17 @@ class SDL2 : IBackend {
 		glGenFramebuffers(1, cast(uint*)&rt.fboId);
 		glBindFramebuffer(GL_FRAMEBUFFER, cast(uint)rt.fboId);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureId, 0);
+		glCheckError();
 
-		// Create and bind renderbuffer
+		// Create and bind depth renderbuffer
 		// TODO: Saving previous id may be needed, same with fbo
 		glGenRenderbuffers(1, cast(uint*)&rt.rbId);
 		glBindRenderbuffer(GL_RENDERBUFFER, cast(uint)rt.rbId);
-		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, cast(uint)rt.rbId);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, cast(uint)rt.rbId);
 		glBindRenderbuffer(GL_RENDERBUFFER, 0);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glCheckError();
 
 		return rt;
 	}

@@ -22,9 +22,9 @@ class Texture {
 	/**
 		Creates a new, empty texture.
 	*/
-	this(int width, int height) {
+	this(int width, int height, MinFilter minFilter = MinFilter.LinearMipmapLinear, MagFilter magFilter = MagFilter.Linear) {
 		id = Backend.TextureCreate(width, height);
-		Backend.TextureGenerateMipmap(MinFilter.LinearMipmapLinear, MagFilter.Linear); // TODO: Mipmapy wybierane gdzie indziej
+		Backend.TextureGenerateMipmap(minFilter, magFilter); // TODO: Mipmapy wybierane gdzie indziej
 		Backend.TextureWrapMode(WrapMode.Repeat, WrapMode.Repeat);
 	}
 

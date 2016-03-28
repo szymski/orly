@@ -19,8 +19,7 @@ class Transform : Component {
  public:
 
 	this() {
-		position = new Vector3();
-		scale = new Vector3(1, 1, 1);
+		scale = Vector3(1, 1, 1);
 		rotation = new Quaternion();
 	}
 
@@ -29,12 +28,9 @@ class Transform : Component {
 	@property ref Quaternion Rotation() { return rotation; }
 
 	Matrix4x4 GetMatrix() {
-		auto translationMatrix = new Matrix4x4();
+		auto translationMatrix = Matrix4x4.Translation(position);
 		auto rotationMatrix = rotation.Matrix;
-		auto scaleMatrix = new Matrix4x4();
-
-		translationMatrix.InitTranslation(position);
-		scaleMatrix.InitScale(scale);
+		auto scaleMatrix = Matrix4x4.Scale(scale);
 
 		return translationMatrix * (rotationMatrix * scaleMatrix);
 	}

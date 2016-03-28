@@ -28,14 +28,16 @@ static class Log {
 		Prints a debug message to the console.
 	*/
 	static void PrintDebug(T...)(T args) {
-		string str = "<" ~ Clock.currTime().toSimpleString() ~ "> DEBUG: ";
+		debug {
+			string str = "<" ~ Clock.currTime().toSimpleString() ~ "> DEBUG: ";
 
-		foreach(obj; args)
-			str ~= to!string(obj);
+			foreach(obj; args)
+				str ~= to!string(obj);
 
-		lines ~= str;
+			lines ~= str;
 
-		writeln(str);
+			writeln(str);
+		}
 	}
     
 	/**

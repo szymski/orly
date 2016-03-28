@@ -176,7 +176,7 @@ class GrassRenderer : Component {
 class Another : Component {
 	
 	override void OnUpdate() {
-		GameObject.Transform.Rotation *= new Quaternion(new Vector3(0, 1, 0), Time.DeltaTime * 40f);
+		GameObject.Transform.Rotation *= new Quaternion(Vector3(0, 1, 0), Time.DeltaTime * 40f);
 	}
 
 	void OnPreRender() {
@@ -234,5 +234,5 @@ void PrepareTheScene() {
 
 	GameObject obj2 = CurrentScene.CreateGameObject();
 	obj2.AddComponent!GrassRenderer();
-	obj2.Transform.Rotation = new Quaternion(new Vector3(-1, 0, 0), 180f);
+	obj2.Transform.Rotation = new Quaternion(Vector3(-1, 0, 0), 180f);
 }

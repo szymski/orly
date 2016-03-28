@@ -3,19 +3,14 @@ module orly.engine.math.vector2;
 import std.math;
 import std.string : format;
 
-class Vector2 {
+struct Vector2 {
  private:
 
-	float x, y;
+	float x = 0, y = 0;
 
  public:
 
-	this() {
-		x = 0;
-		y = 0;
-	}
-
-	this(float x, float y) {
+	this(float x = 0, float y = 0) {
 		this.x = x;
 		this.y = y;
 	}
@@ -31,14 +26,14 @@ class Vector2 {
 	*/
 	@property Vector2 Normalized() {
 		float m = Length;
-		return new Vector2(x / m, y / m);
+		return Vector2(x / m, y / m);
 	}
 
 	/**
 		Returns a copy of the vector.
 	*/
 	Vector2 Copy() {
-		return new Vector2(x, y);
+		return Vector2(x, y);
 	}
 
 	/*
@@ -76,28 +71,28 @@ class Vector2 {
 	}
 
 	Vector2 opBinary(string op)(Vector2 other) {
-		static if(op == "+") return new Vector2(x + other.x, y + other.y);
-		else static if(op == "-") return new Vector2(x - other.x, y - other.y);
-		else static if(op == "*") return new Vector2(x * other.x, y * other.y);
-		else static if(op == "/") return new Vector2(x / other.x, y / other.y);
+		static if(op == "+") return Vector2(x + other.x, y + other.y);
+		else static if(op == "-") return Vector2(x - other.x, y - other.y);
+		else static if(op == "*") return Vector2(x * other.x, y * other.y);
+		else static if(op == "/") return Vector2(x / other.x, y / other.y);
 	}
 
 	Vector2 opBinary(string op)(int other) {
-		static if(op == "*") return new Vector2(x * other, y * other);
-		else static if(op == "/") return new Vector2(x / other, y / other);
+		static if(op == "*") return Vector2(x * other, y * other);
+		else static if(op == "/") return Vector2(x / other, y / other);
 	}
 
 	Vector2 opBinary(string op)(float other) {
-		static if(op == "*") return new Vector2(x * other, y * other);
-		else static if(op == "/") return new Vector2(x / other, y / other);
+		static if(op == "*") return Vector2(x * other, y * other);
+		else static if(op == "/") return Vector2(x / other, y / other);
 	}
 
 	Vector2 opUnary(string op)() if (op == "-")
     {
-        return new Vector2(-x, -y);
+        return Vector2(-x, -y);
     }
 
-	override string toString() {
+	string toString() {
 		return format("Vector2 { %f, %f }", x, y);
 	}
 
@@ -113,19 +108,19 @@ class Vector2 {
 }
 
 unittest {
-	Vector2 vec = new Vector2(1, 2);
+	Vector2 vec = Vector2(1, 2);
 
 	assert(vec.X == 1);
 	assert(vec.Y == 2);
 
-	vec = new Vector2(4, 3);
+	vec = Vector2(4, 3);
 	assert(vec.Length == 5);
 
-	vec = new Vector2(12, 8);
-	auto vec2 = new Vector2(51, 8);
+	vec = Vector2(12, 8);
+	auto vec2 = Vector2(51, 8);
 
 	assert((vec + vec2).X == 63);
 
-	vec = new Vector2(1, 1);
+	vec = Vector2(1, 1);
 	assert((vec * 10).X == 10);
 }

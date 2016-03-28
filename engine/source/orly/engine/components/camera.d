@@ -24,7 +24,6 @@ class Camera : Component {
 		fov = 90f;
 		zNear = 0.1f;
 		zFar = 10000f;
-		projectionMatrix = new Matrix4x4();
 
 		main = this;
 	}
@@ -34,7 +33,7 @@ class Camera : Component {
 		Backend.EnableFaceCulling();
 		Backend.SetFaceCullingMode(CullingMode.Back);
 
-		projectionMatrix.InitPerspective(fov, zNear, zFar);
+		projectionMatrix = Matrix4x4.Perspective(fov, zNear, zFar);
 		Backend.SetMatrixMode(MatrixMode.Projection);
 		Backend.SetViewport(0, 0, Screen.Width, Screen.Height);
 		Backend.SetMatrix(projectionMatrix);
@@ -46,10 +45,8 @@ class Camera : Component {
 	// TODO: Obliczanie macierzy tylko raz podczas danej klatki
 
 	Matrix4x4 GetViewMatrix() {
-		auto translationMatrix = new Matrix4x4();
+		auto translationMatrix = Matrix4x4.Translation(-GameObject.Transform.Position);
 		auto rotationMatrix = GameObject.Transform.Rotation.Conjugated.Matrix;
-
-		translationMatrix.InitTranslation(-GameObject.Transform.Position);
 
 		return rotationMatrix * translationMatrix;
 	}
